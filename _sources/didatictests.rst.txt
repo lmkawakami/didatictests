@@ -12,6 +12,14 @@ Subpackages
 Submodules
 ----------
 
+didatictests.didatictests module
+--------------------------------
+
+.. automodule:: didatictests.didatictests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 didatictests.example module
 ---------------------------
 
