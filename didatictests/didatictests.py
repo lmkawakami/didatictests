@@ -5,13 +5,13 @@ def tuplefy(thing):
     return thing if type(thing) is tuple else (thing,)
 
 
-def parse(*args, **kwargs):
-    return {"pos_inputs": args, "key_inputs": kwargs}
-
-
 class Didatic_test:
     __print_fn_backup = builtins.print
     __input_fn_backup = builtins.input
+
+    @staticmethod
+    def parse_args(*args, **kwargs):
+        return {"pos_inputs": args, "key_inputs": kwargs}
 
     @staticmethod
     def run_tests(tests):
@@ -177,7 +177,7 @@ class Didatic_test:
             }
 
     def print_outcome(self):
-        print(f"Caso: {self.test_name}")
+        print(f"Case: {self.test_name}")
         if self.test_failed:
             self.print_exception()
             if self.verbose:
@@ -189,7 +189,7 @@ class Didatic_test:
         print("---------------------------------------------------")
 
     def print_exception(self):
-        print("🚨⚠️🚨⚠️🚨 Erro durante os testes! 💀💀💀")
+        print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
         print(type(self.test_exception))
         print(self.test_exception.args)
         print(self.test_exception)
@@ -205,8 +205,8 @@ class Didatic_test:
             f"prints: {prints_check}  " if self.run_prints_test else ""
         )
         remaining_keyboard_inputs_warning = (
-            f"⚠️☢️ Atenção!!! Sobraram entradas do usuário que \
-              não foram usadas: {self.keyboard_inputs_list}"
+            f"⚠️☢️ Warning!!! some inputs were not used: \
+              {self.keyboard_inputs_list}"
             if len(self.keyboard_inputs_list)
             else ""
         )
@@ -224,25 +224,25 @@ class Didatic_test:
                 " | "
             )
 
-            fn_args_line = f"   ➖ Function args:     {self.args} {self.kwargs}"
-            keyboard_inputs_line = f"\n   ➖ Keyboard inputs:   {self.keyboard_inputs}"
+            fn_args_line = f"   ➖ Function args:      {self.args} {self.kwargs}"
+            keyboard_inputs_line = f"\n   ➖ Keyboard inputs:    {self.keyboard_inputs}"
             output_line = (
-                f"\n   {outputs_check} Function outputs:  {self.fn_output}"
+                f"\n   {outputs_check} Function outputs:   {self.fn_output}"
                 if self.run_output_test
                 else ""
             )
             expected_output_line = (
-                f"\n   ➖ Resposta certa:    {self.expected_output}"
+                f"\n   ➖ Expected output:    {self.expected_output}"
                 if self.run_output_test
                 else ""
             )
             prints_line = (
-                f"\n   {prints_check} Prints da função:  {stripped_print_buffer}"
+                f"\n   {prints_check} fn internal prints: {stripped_print_buffer}"
                 if self.run_prints_test
                 else ""
             )
             expected_prints_line = (
-                f"\n   ➖ Prints corretos:   {stripped_expected_prints}"
+                f"\n   ➖ Expected prints:    {stripped_expected_prints}"
                 if self.run_prints_test
                 else ""
             )
