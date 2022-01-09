@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to didatictests’s documentation! &mdash; didatictests 0.0.3 documentation</title>
+  <title>Welcome to didatictests’s documentation! &mdash; didatictests 0.0.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="#" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.3
+                0.0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -104,23 +104,143 @@
 <a class="reference external image-reference" href="https://github.com/lmkawakami/didatictests/actions"><img alt="Build Status" src="https://github.com/lmkawakami/didatictests/workflows/Build%20Main/badge.svg" /></a>
 <a class="reference external image-reference" href="https://lmkawakami.github.io/didatictests/"><img alt="Documentation" src="https://github.com/lmkawakami/didatictests/workflows/Documentation/badge.svg" /></a>
 <a class="reference external image-reference" href="https://codecov.io/gh/lmkawakami/didatictests"><img alt="Code Coverage" src="https://codecov.io/gh/lmkawakami/didatictests/branch/main/graph/badge.svg" /></a>
-<p>Build simple tests to validate functions prints and outputs with configurable args, kwargs and simulated user inputs</p>
 <hr class="docutils" />
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p>Store values and retain the prior value in memory</p></li>
-<li><p>… some other functionality</p></li>
+<li><p>Run functions with preconfigured simulated keyboard inputs</p></li>
+<li><p>Build simple tests to validate functions prints and outputs with configurable args, kwargs and simulated user inputs</p></li>
 </ul>
 </section>
 <section id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">didatictests</span> <span class="kn">import</span> <span class="n">Example</span>
-
-<span class="n">a</span> <span class="o">=</span> <span class="n">Example</span><span class="p">()</span>
-<span class="n">a</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>  <span class="c1"># 10</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">didatictests</span> <span class="kn">import</span> <span class="n">Didatic_test</span> <span class="k">as</span> <span class="n">Dt</span>
 </pre></div>
 </div>
+<p>Demo function: <code class="docutils literal notranslate"><span class="pre">the_function(arg)</span></code>:</p>
+<ul class="simple">
+<li><p>receives 1 argument <code class="docutils literal notranslate"><span class="pre">arg</span></code></p></li>
+<li><p>receives 1 user input <code class="docutils literal notranslate"><span class="pre">inp</span></code></p></li>
+<li><p>calculates <code class="docutils literal notranslate"><span class="pre">total</span> <span class="pre">=</span> <span class="pre">arg</span> <span class="pre">+</span> <span class="pre">int(inp)</span></code></p></li>
+<li><p>prints <code class="docutils literal notranslate"><span class="pre">total</span></code></p></li>
+<li><p>return <code class="docutils literal notranslate"><span class="pre">total</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">the_function</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+  <span class="n">inp</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;One number, please: &quot;</span><span class="p">)</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="n">arg</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">total</span>
+</pre></div>
+</div>
+<p>Create and run some tests:</p>
+<hr class="docutils" />
+<section id="test-1">
+<h3>Test-1<a class="headerlink" href="#test-1" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test1</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
+  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
+  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;This one shall pass!&#39;</span><span class="p">,</span>
+  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">test1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>print:
+<a href="#id1"><span class="problematic" id="id2">``</span></a>`
+Case: This one shall pass!
+[I]: One number, please:  2</p></li>
+</ul>
+</section>
+</section>
+<section id="outputs-prints">
+<h2>outputs: ✔️  prints: ✔️<a class="headerlink" href="#outputs-prints" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- return:
+```python
+{&#39;output_is_correct&#39;: True, &#39;print_is_correct&#39;: True, &#39;test_failed&#39;: False, &#39;test_done&#39;: True}
+</pre></div>
+</div>
+<hr class="docutils" />
+<section id="test-2">
+<h3>Test-2<a class="headerlink" href="#test-2" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test2</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
+  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
+  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;You Shall Not Pass!!!&#39;</span><span class="p">,</span>
+  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;13</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">test2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>print:
+<a href="#id3"><span class="problematic" id="id4">``</span></a>`
+Case: You Shall Not Pass!!!
+[I]: One number, please:  2</p></li>
+</ul>
+<dl>
+<dt>outputs: ✔️  prints: ❌<span class="raw-html-m2r"><br></span></dt><dd><p>➖ Function args:      (40,) {}
+➖ Keyboard inputs:    (‘2’,)
+✔️ Function outputs:   42<span class="raw-html-m2r"><br></span>
+➖ Expected output:    42
+❌ fn internal prints: 42</p>
+<p>➖ Expected prints:    13</p>
+</dd>
+</dl>
+<hr class="docutils" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- return:
+```python
+{&#39;output_is_correct&#39;: True, &#39;print_is_correct&#39;: False, &#39;test_failed&#39;: False, &#39;test_done&#39;: True}
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="test-3">
+<h3>Test-3<a class="headerlink" href="#test-3" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test3</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
+  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="s1">&#39;forty&#39;</span><span class="p">),</span>
+  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;two&#39;</span><span class="p">),</span>
+  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;Error demo&#39;</span><span class="p">,</span>
+  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">test3</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>print:
+<a href="#id5"><span class="problematic" id="id6">``</span></a>`
+Case: Error demo
+🚨⚠️🚨⚠️🚨 Error! 💀💀💀
+&lt;class ‘ValueError’&gt;
+(“invalid literal for int() with base 10: ‘two’”,)
+invalid literal for int() with base 10: ‘two’
+[I]: One number, please:  two</p></li>
+</ul>
+<hr class="docutils" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- return:
+```python
+{&#39;output_is_correct&#39;: False, &#39;print_is_correct&#39;: False, &#39;test_failed&#39;: True, &#39;test_done&#39;: False}
+</pre></div>
+</div>
+</section>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
@@ -133,95 +253,8 @@
 </section>
 <section id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline"></a></h2>
-<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.</p>
-</section>
-<section id="the-four-commands-you-need-to-know">
-<h2>The Four Commands You Need To Know<a class="headerlink" href="#the-four-commands-you-need-to-know" title="Permalink to this headline"></a></h2>
-<ol class="arabic">
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev]</span></code></p>
-<blockquote>
-<div><p>This will install your package in editable mode with all the required development
-dependencies (i.e. <code class="docutils literal notranslate"><span class="pre">tox</span></code>).</p>
-</div></blockquote>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">build</span></code></p>
-<blockquote>
-<div><p>This will run <code class="docutils literal notranslate"><span class="pre">tox</span></code> which will run all your tests in both Python 3.7
-and Python 3.8 as well as linting your code.</p>
-</div></blockquote>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code></p>
-<blockquote>
-<div><p>This will clean up various Python and build generated files so that you can ensure
-that you are working in a clean environment.</p>
-</div></blockquote>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs</span></code></p>
-<blockquote>
-<div><p>This will generate and launch a web browser to view the most up-to-date
-documentation for your Python package.</p>
-</div></blockquote>
-</li>
-</ol>
-<section id="additional-optional-setup-steps">
-<h3>Additional Optional Setup Steps:<a class="headerlink" href="#additional-optional-setup-steps" title="Permalink to this headline"></a></h3>
-<ul class="simple">
-<li><p>Turn your project into a GitHub repository:</p>
-<ul>
-<li><p>Make an account on <a class="reference external" href="https://github.com">github.com</a></p></li>
-<li><p>Go to <a class="reference external" href="https://github.com/new">make a new repository</a></p></li>
-<li><p><em>Recommendations:</em></p>
-<ul>
-<li><p><em>It is strongly recommended to make the repository name the same as the Python
-package name</em></p></li>
-<li><p><em>A lot of the following optional steps are *free</em> if the repository is Public,
-plus open source is cool*</p></li>
-</ul>
-</li>
-<li><p>After a GitHub repo has been created, run the commands listed under:
-“…or push an existing repository from the command line”</p></li>
-</ul>
-</li>
-<li><p>Register your project with Codecov:</p>
-<ul>
-<li><p>Make an account on <a class="reference external" href="https://codecov.io">codecov.io</a>(Recommended to sign in with GitHub)
-everything else will be handled for you.</p></li>
-</ul>
-</li>
-<li><p>Ensure that you have set GitHub pages to build the <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch by selecting the
-<code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch in the dropdown in the “GitHub Pages” section of the repository settings.
-(<a class="reference external" href="https://github.com/lmkawakami/didatictests/settings">Repo Settings</a>)</p></li>
-<li><p>Register your project with PyPI:</p>
-<ul>
-<li><p>Make an account on <a class="reference external" href="https://pypi.org">pypi.org</a></p></li>
-<li><p>Go to your GitHub repository’s settings and under the
-<a class="reference external" href="https://github.com/lmkawakami/didatictests/settings/secrets/actions">Secrets tab</a>,
-add a secret called <code class="docutils literal notranslate"><span class="pre">PYPI_TOKEN</span></code> with your password for your PyPI account.
-Don’t worry, no one will see this password because it will be encrypted.</p></li>
-<li><p>Next time you push to the branch <code class="docutils literal notranslate"><span class="pre">main</span></code> after using <code class="docutils literal notranslate"><span class="pre">bump2version</span></code>, GitHub
-actions will build and deploy your Python package to PyPI.</p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="suggested-git-branch-strategy">
-<h3>Suggested Git Branch Strategy<a class="headerlink" href="#suggested-git-branch-strategy" title="Permalink to this headline"></a></h3>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> is for the most up-to-date development, very rarely should you directly
-commit to this branch. GitHub Actions will run on every push and on a CRON to this
-branch but still recommended to commit to your development branches and make pull
-requests to main. If you push a tagged commit with bumpversion, this will also release to PyPI.</p></li>
-<li><p>Your day-to-day work should exist on branches separate from <code class="docutils literal notranslate"><span class="pre">main</span></code>. Even if it is
-just yourself working on the repository, make a PR from your working branch to <code class="docutils literal notranslate"><span class="pre">main</span></code>
-so that you can ensure your commits don’t break the development head. GitHub Actions
-will run on every push to any branch or any pull request from any branch to any other
-branch.</p></li>
-<li><p>It is recommended to use “Squash and Merge” commits when committing PR’s. It makes
-each set of changes to <code class="docutils literal notranslate"><span class="pre">main</span></code> atomic and as a side effect naturally encourages small
-well defined PR’s.</p></li>
-</ol>
-<p><strong>MIT license</strong></p>
-</section>
+<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.
+<strong>MIT license</strong></p>
 </section>
 </section>
 <section id="indices-and-tables">

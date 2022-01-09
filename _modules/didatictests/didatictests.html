@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>didatictests.didatictests &mdash; didatictests 0.0.3 documentation</title>
+  <title>didatictests.didatictests &mdash; didatictests 0.0.4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.3
+                0.0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -99,13 +99,13 @@
     <span class="k">return</span> <span class="n">thing</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span> <span class="k">else</span> <span class="p">(</span><span class="n">thing</span><span class="p">,)</span></div>
 
 
-<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span> <span class="s2">&quot;key_inputs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">}</span></div>
-
-
 <div class="viewcode-block" id="Didatic_test"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test">[docs]</a><span class="k">class</span> <span class="nc">Didatic_test</span><span class="p">:</span>
     <span class="n">__print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
     <span class="n">__input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
+
+<div class="viewcode-block" id="Didatic_test.parse_args"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.parse_args">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span> <span class="s2">&quot;key_inputs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="Didatic_test.run_tests"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.run_tests">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">run_tests</span><span class="p">(</span><span class="n">tests</span><span class="p">):</span>
@@ -271,7 +271,7 @@
             <span class="p">}</span></div>
 
 <div class="viewcode-block" id="Didatic_test.print_outcome"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.print_outcome">[docs]</a>    <span class="k">def</span> <span class="nf">print_outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Caso: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Case: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_exception</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -283,7 +283,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------------&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Didatic_test.print_exception"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.print_exception">[docs]</a>    <span class="k">def</span> <span class="nf">print_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚨⚠️🚨⚠️🚨 Erro durante os testes! 💀💀💀&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚨⚠️🚨⚠️🚨 Error! 💀💀💀&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span><span class="p">)</span></div>
@@ -299,8 +299,8 @@
             <span class="sa">f</span><span class="s2">&quot;prints: </span><span class="si">{</span><span class="n">prints_check</span><span class="si">}</span><span class="s2">  &quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_prints_test</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="p">)</span>
         <span class="n">remaining_keyboard_inputs_warning</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;⚠️☢️ Atenção!!! Sobraram entradas do usuário que </span><span class="se">\</span>
-<span class="s2">              não foram usadas: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;⚠️☢️ Warning!!! some inputs were not used: </span><span class="se">\</span>
+<span class="s2">              </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="p">)</span>
             <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="p">)</span>
@@ -318,25 +318,25 @@
                 <span class="s2">&quot; | &quot;</span>
             <span class="p">)</span>
 
-            <span class="n">fn_args_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;   ➖ Function args:     </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">keyboard_inputs_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Keyboard inputs:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">fn_args_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;   ➖ Function args:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">keyboard_inputs_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Keyboard inputs:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">output_line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">outputs_check</span><span class="si">}</span><span class="s2"> Function outputs:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_output</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">outputs_check</span><span class="si">}</span><span class="s2"> Function outputs:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_output</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_output_test</span>
                 <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="p">)</span>
             <span class="n">expected_output_line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Resposta certa:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Expected output:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_output_test</span>
                 <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="p">)</span>
             <span class="n">prints_line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">prints_check</span><span class="si">}</span><span class="s2"> Prints da função:  </span><span class="si">{</span><span class="n">stripped_print_buffer</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">prints_check</span><span class="si">}</span><span class="s2"> fn internal prints: </span><span class="si">{</span><span class="n">stripped_print_buffer</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_prints_test</span>
                 <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="p">)</span>
             <span class="n">expected_prints_line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Prints corretos:   </span><span class="si">{</span><span class="n">stripped_expected_prints</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Expected prints:    </span><span class="si">{</span><span class="n">stripped_expected_prints</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_prints_test</span>
                 <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="p">)</span>
