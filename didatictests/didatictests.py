@@ -188,7 +188,7 @@ class Didatic_test:
         print("---------------------------------------------------")
 
     def print_exception(self):
-        print("🚨⚠️🚨⚠️🚨 Erro durante os testes! 💀💀💀")
+        print("🚨⚠️🚨⚠️🚨 Erro durante os testes! 💀 💀 💀")
         print(type(self.test_exception))
         print(self.test_exception.args)
         print(self.test_exception)
