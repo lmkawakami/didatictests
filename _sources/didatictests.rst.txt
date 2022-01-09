@@ -1,0 +1,29 @@
+didatictests package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   didatictests.bin
+
+Submodules
+----------
+
+didatictests.example module
+---------------------------
+
+.. automodule:: didatictests.example
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: didatictests
+   :members:
+   :undoc-members:
+   :show-inheritance:

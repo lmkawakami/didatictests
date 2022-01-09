@@ -1,0 +1,21 @@
+didatictests.bin package
+========================
+
+Submodules
+----------
+
+didatictests.bin.my\_example module
+-----------------------------------
+
+.. automodule:: didatictests.bin.my_example
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: didatictests.bin
+   :members:
+   :undoc-members:
+   :show-inheritance:
