@@ -1,22 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Imports should be grouped into:
-# Standard library imports
-# Related third party imports
-# Local application / relative imports
-# in that order
-
-# Standard library
 import builtins
-from typing import Any, Callable, Tuple
-from __future__ import annotations
-
-# Third party
-
-# Relative
-
-###############################################################################
 
 
 def tuplefy(thing):
@@ -27,96 +9,12 @@ def parse(*args, **kwargs):
     return {"pos_inputs": args, "key_inputs": kwargs}
 
 
-###############################################################################
-
-
-class Didatic_test(object):
-    """
-    A class to configure and run simple didatic tests
-
-    Didatic_test(Callable=None, args={}, test_name=None, keyboard_inputs=(), expected_output=None, expected_prints="", verbose=None, run_output_test=None, run_prints_test=None,
-    )
-
-    Parameters
-    ----------
-    fn: Callable
-        The function that will be tested
-    args: dict
-        The arguments that fn will be tested with. Use parse() to generate args, ex.: args = parse('a',5,7, x=1, s='aaa')
-    test_name: str
-        An optional identifier that will be printed with the test result
-    keyboard_inputs: Tuple[str, ...]
-        A tuple containig all the simulated keyboards inputs that will be used in every fn's input()
-    expected_output: Any
-        What the fn's return value should be
-    expected_prints: str
-        What the fn's internal print()'s concatenation should be (including new line character)
-    verbose: bool
-        Controls if all the fn's internal print()'s and input()'s prompts are printed
-    run_output_test: bool
-        Controls if the fn's return value is checked
-    run_prints_test: bool
-        Controls if the fn's internal print()'s are checked
-    """
-
+class Didatic_test:
     __print_fn_backup = builtins.print
     __input_fn_backup = builtins.input
 
-    fn = None
-    verbose = False
-    run_output_test = True
-    run_prints_test = False
-
     @staticmethod
-    def set_defaults(
-        fn: Callable = None,
-        verbose: bool = None,
-        run_output_test: bool = None,
-        run_prints_test: bool = None,
-    ):
-        """
-        set_defaults(fn=None, verbose=None, run_output_test=None, run_prints_test None)
-
-        Set common default values fot the tests configs to avoid repetition when setting them up later
-
-        Parameters
-        ----------
-            fn: Callable
-                The function that will be tested
-            verbose: bool
-                Controls if all the fn's internal print()'s and input()'s prompts are printed
-            run_output_test: bool
-                Controls if the fn's return value is checked
-            run_prints_test: bool
-                Controls if the fn's internal print()'s are checked
-        """
-
-        if not (fn is None):
-
-            def new_fn(self, *args, **kwargs):
-                return fn(*args, **kwargs)
-
-            Didatic_test.fn = new_fn
-        if not (verbose is None):
-            Didatic_test.verbose = verbose
-        if not (run_output_test is None):
-            Didatic_test.run_output_test = run_output_test
-        if not (run_prints_test is None):
-            Didatic_test.run_prints_test = run_prints_test
-
-    @staticmethod
-    def run_tests(tests: list[Didatic_test]):
-        """
-        run_tests(tests)
-
-        Run all the tests in the 'tests' list
-
-        Parameters
-        ----------
-            tests: list[Didatic_test]
-                A list of tests that you want to execute
-        """
-
+    def run_tests(tests):
         results = []
         number_of_tests = len(tests)
         completed_tests = 0
@@ -144,17 +42,37 @@ class Didatic_test(object):
         )
         return results
 
+    fn = None
+    verbose = False
+    run_output_test = True
+    run_prints_test = False
+
+    @staticmethod
+    def set_defaults(fn=None, verbose=None, run_output_test=None, run_prints_test=None):
+        if not (fn is None):
+
+            def new_fn(self, *args, **kwargs):
+                return fn(*args, **kwargs)
+
+            Didatic_test.fn = new_fn
+        if not (verbose is None):
+            Didatic_test.verbose = verbose
+        if not (run_output_test is None):
+            Didatic_test.run_output_test = run_output_test
+        if not (run_prints_test is None):
+            Didatic_test.run_prints_test = run_prints_test
+
     def __init__(
         self,
-        fn: Callable = None,
-        args: dict = {},
-        test_name: str = None,
-        keyboard_inputs: Tuple[str, ...] = (),
-        expected_output: Any = None,
-        expected_prints: str = "",
-        verbose: bool = None,
-        run_output_test: bool = None,
-        run_prints_test: bool = None,
+        fn=None,
+        args={},
+        test_name=None,
+        keyboard_inputs=(),
+        expected_output=None,
+        expected_prints="",
+        verbose=None,
+        run_output_test=None,
+        run_prints_test=None,
     ):
         if not (fn is None):
             self.fn = fn
@@ -211,7 +129,8 @@ class Didatic_test(object):
         prompt = sep.join(list([str(object) for object in objects])) + end
         if self.verbose:
             self.__verbose_buffer += "[P]: " + prompt
-        # Filtrar linhas que começam com '[DBG]' para usálas como debug sem comprometer os testes de comparação de print
+        # Filtrar linhas que começam com '[DBG]'
+        # para usálas como debug sem comprometer os testes de comparação de print
         if prompt[0:5] != "[DBG]":
             self.__prints_buffer += prompt
 
@@ -230,19 +149,7 @@ class Didatic_test(object):
         self.__prints_buffer = ""
         self.__verbose_buffer = ""
 
-    def run(self) -> dict:
-        """
-        run()
-
-        Run the configured Didatic_test, print the result and returns a dictionary with the test outcome
-
-        {
-            "output_is_correct": bool,
-            "print_is_correct": bool,
-            "test_failed": bool,
-            "test_done": bool,
-        }
-        """
+    def run(self):
 
         self.keyboard_inputs_list = list(self.keyboard_inputs)
         self.__toggle_test_mode(True)
@@ -260,7 +167,7 @@ class Didatic_test(object):
 
         finally:
             self.__toggle_test_mode(False)
-            self.__print_outcome()
+            self.print_outcome()
 
             return {
                 "output_is_correct": self.output_is_correct,
@@ -269,25 +176,25 @@ class Didatic_test(object):
                 "test_done": self.test_done,
             }
 
-    def __print_outcome(self):
+    def print_outcome(self):
         print(f"Caso: {self.test_name}")
         if self.test_failed:
-            self.__print_exception()
+            self.print_exception()
             if self.verbose:
                 print(self.__verbose_buffer)
         else:
             if self.verbose:
                 print(self.__verbose_buffer)
-            self.__print_result()
+            self.print_result()
         print("---------------------------------------------------")
 
-    def __print_exception(self):
+    def print_exception(self):
         print("🚨⚠️🚨⚠️🚨 Erro durante os testes! 💀💀💀")
         print(type(self.test_exception))
         print(self.test_exception.args)
         print(self.test_exception)
 
-    def __print_result(self):
+    def print_result(self):
         outputs_check = "✔️" if self.output_is_correct else "❌"
         prints_check = "✔️" if self.print_is_correct else "❌"
 
@@ -298,13 +205,15 @@ class Didatic_test(object):
             f"prints: {prints_check}  " if self.run_prints_test else ""
         )
         remaining_keyboard_inputs_warning = (
-            f"⚠️☢️ Atenção!!! Sobraram entradas do usuário que não foram usadas: {self.keyboard_inputs_list}"
+            f"⚠️☢️ Atenção!!! Sobraram entradas do usuário que \
+              não foram usadas: {self.keyboard_inputs_list}"
             if len(self.keyboard_inputs_list)
             else ""
         )
 
         print(
-            f"{outputs_check_message}{prints_check_message}{remaining_keyboard_inputs_warning}"
+            f"{outputs_check_message}{prints_check_message}\
+              {remaining_keyboard_inputs_warning}"
         )
 
         if (not self.output_is_correct) or (not self.print_is_correct):
@@ -339,5 +248,6 @@ class Didatic_test(object):
             )
 
             print(
-                f"{fn_args_line}{keyboard_inputs_line}{output_line}{expected_output_line}{prints_line}{expected_prints_line}"
+                f"{fn_args_line}{keyboard_inputs_line}{output_line}\
+                  {expected_output_line}{prints_line}{expected_prints_line}"
             )

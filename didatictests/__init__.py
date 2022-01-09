@@ -14,4 +14,5 @@ def get_module_version():
 
 
 from .example import Example  # noqa: F401
-from .didatictests import Didatic_test
+
+from .didatictests import Didatic_test  # noqa: F401
