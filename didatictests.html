@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>didatictests package &mdash; didatictests 0.0.5 documentation</title>
+  <title>didatictests package &mdash; didatictests 0.0.6 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.5
+                0.0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -145,19 +145,66 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.input_interceptor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_interceptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.input_interceptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.input_interceptor" title="Permalink to this definition"></a></dt>
+<dd><p>Intercept user inputs and copy them to a list for later use in test setup</p>
+<p>ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><dl class="simple">
+<dt><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</dt><dd><ul>
+<li><p><strong>args</strong> (<em>{‘pos_inputs’:(1,2,3), ‘key_inputs’:{‘x’:0, ‘y’:2}}</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>input_list: a list of all user entries that were intercepted</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.just_run">
+<span class="sig-name descname"><span class="pre">just_run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.just_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.just_run" title="Permalink to this definition"></a></dt>
+<dd><p>Run the configured Didatic_test, print the result and             returns a dictionary with the test outcome</p>
+<dl class="simple">
+<dt>{</dt><dd><p>“output_is_correct”: bool,
+“print_is_correct”: bool,
+“test_failed”: bool,
+“test_done”: bool,</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.parse_args">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.parse_args" title="Permalink to this definition"></a></dt>
 <dd><p>Auxiliar function to pass fn’s args and kwargs like in a normal fn call
 Just passs the positional args first and then key arguments</p>
 <p>ex.: parse_args(1,2,3,x=15,y=[0,0,1],z=’aa’)</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>args</strong> (<em>The positional arguments of fn</em>)</p></li>
+<li><dl class="simple">
+<dt><strong>args</strong> (<em>The positional arguments of fn</em>)</dt><dd><ul>
 <li><p><strong>kwargs</strong> (<em>The key arguments of fn</em>)</p></li>
 </ul>
 </dd>
 </dl>
+</li>
+</ul>
+<p>Returns</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>values: dict with 2 keys: ‘pos_inputs’ and ‘key_inputs’</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
