@@ -121,6 +121,24 @@
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">didatictests.didatictests.</span></span><span class="sig-name descname"><span class="pre">Didatic_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_prints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to configure and run simple didatic tests</p>
+<p>Didatic_test(Callable=None, args={}, test_name=None, keyboard_inputs=(),         expected_output=None, expected_prints=””, verbose=None,             run_output_test=None, run_prints_test=None,
+)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>Callable</em>) – The function that will be tested</p></li>
+<li><p><strong>args</strong> (<em>dict</em>) – The arguments that fn will be tested with. Use parse() to generate args,             ex.: args = parse(‘a’,5,7, x=1, s=’aaa’)</p></li>
+<li><p><strong>test_name</strong> (<em>str</em>) – An optional identifier that will be printed with the test result</p></li>
+<li><p><strong>keyboard_inputs</strong> (<em>Tuple[str, …]</em>) – A tuple containig all the simulated keyboards inputs that will be used in             every fn’s input()</p></li>
+<li><p><strong>expected_output</strong> (<em>Any</em>) – What the fn’s return value should be</p></li>
+<li><p><strong>expected_prints</strong> (<em>str</em>) – What the fn’s internal print()’s concatenation should be             (including new line character)</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Controls if all the fn’s internal print()’s and input()’s prompts are printed</p></li>
+<li><p><strong>run_output_test</strong> (<em>bool</em>) – Controls if the fn’s return value is checked</p></li>
+<li><p><strong>run_prints_test</strong> (<em>bool</em>) – Controls if the fn’s internal print()’s are checked</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.fn">
 <span class="sig-name descname"><span class="pre">fn</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#didatictests.didatictests.Didatic_test.fn" title="Permalink to this definition"></a></dt>
@@ -128,28 +146,33 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.parse_args">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.parse_args" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.print_exception">
-<span class="sig-name descname"><span class="pre">print_exception</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.print_exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.print_exception" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.print_outcome">
-<span class="sig-name descname"><span class="pre">print_outcome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.print_outcome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.print_outcome" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.print_result">
-<span class="sig-name descname"><span class="pre">print_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.print_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.print_result" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.parse_args" title="Permalink to this definition"></a></dt>
+<dd><p>Auxiliar function to pass fn’s args and kwargs like in a normal fn call
+Just passs the positional args first and then key arguments</p>
+<p>ex.: parse_args(1,2,3,x=15,y=[0,0,1],z=’aa’)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>The positional arguments of fn</em>)</p></li>
+<li><p><strong>kwargs</strong> (<em>The key arguments of fn</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.run" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Run the configured Didatic_test, print the result and             returns a dictionary with the test outcome</p>
+<dl class="simple">
+<dt>{</dt><dd><p>“output_is_correct”: bool,
+“print_is_correct”: bool,
+“test_failed”: bool,
+“test_done”: bool,</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.run_output_test">
@@ -164,12 +187,29 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.run_tests">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tests</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.run_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.run_tests" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Run all the tests in the ‘tests’ list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tests</strong> (<em>list[Didatic_test]</em>) – A list of tests that you want to execute</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.set_defaults">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.set_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.set_defaults" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.set_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.set_defaults" title="Permalink to this definition"></a></dt>
+<dd><p>Set common default values fot the tests configs to avoid repetition when             setting them up later</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>Callable</em>) – The function that will be tested</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Controls if all the fn’s internal print()’s and                     input()’s prompts are printed</p></li>
+<li><p><strong>run_output_test</strong> (<em>bool</em>) – Controls if the fn’s return value is checked</p></li>
+<li><p><strong>run_prints_test</strong> (<em>bool</em>) – Controls if the fn’s internal print()’s are checked</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.verbose">
