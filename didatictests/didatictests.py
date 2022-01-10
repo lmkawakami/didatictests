@@ -56,6 +56,10 @@ class Didatic_test:
         ----------
             args: The positional arguments of fn
             kwargs: The key arguments of fn
+        
+         Returns
+        -------
+            values: dict with 2 keys: 'pos_inputs' and 'key_inputs'
         """
         return {"pos_inputs": args, "key_inputs": kwargs}
 
@@ -175,6 +179,41 @@ class Didatic_test:
                 "test_failed": self.test_failed,
                 "test_done": self.test_done,
             }
+    
+    def just_run(self):
+        """
+        just_run()
+
+        Run the configured Didatic_test, print the result and \
+            returns a dictionary with the test outcome
+
+        {
+            "output_is_correct": bool,
+            "print_is_correct": bool,
+            "test_failed": bool,
+            "test_done": bool,
+        }
+        """
+
+        self.keyboard_inputs_list = list(self.keyboard_inputs)
+        self.__toggle_test_mode(True)
+        self.__flush_buffers()
+
+        try:
+            self.fn(*self.args, **self.kwargs)
+            self.test_done = True
+
+        except Exception as excpt:
+            self.test_failed = True
+            self.test_exception = excpt
+
+        finally:
+            self.__toggle_test_mode(False)
+            self.__print_buffer()
+            if self.test_failed:
+                self.__print_exception()
+
+            return self.test_done and not self.test_failed
 
     def __init__(
         self,
@@ -268,12 +307,15 @@ class Didatic_test:
         if self.test_failed:
             self.__print_exception()
             if self.verbose:
-                print(self.__verbose_buffer)
+                self.__print_buffer()
         else:
             if self.verbose:
                 print(self.__verbose_buffer)
             self.__print_result()
         print("---------------------------------------------------")
+
+    def __print_buffer(self):
+        print(self.__verbose_buffer)
 
     def __print_exception(self):
         print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
