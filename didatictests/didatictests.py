@@ -45,6 +45,23 @@ class Didatic_test:
 
     @staticmethod
     def input_interceptor(fn, args={}):
+        """
+        input_interceptor(fn, args)
+
+        Intercept user inputs and copy them to a list for later use in test setup
+
+        ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))
+
+        Parameters
+        ----------
+            fn: The function that will be called with intercepted inputs
+            args: {'pos_inputs':(1,2,3), 'key_inputs':{'x':0, 'y':2}}
+
+         Returns
+        -------
+            input_list: a list of all user entries that were intercepted
+        """
+
         p_args = args.get("pos_inputs", ())
         kwargs = args.get("key_inputs", {})
         Didatic_test.__input_fn_backup = builtins.input
@@ -81,7 +98,7 @@ class Didatic_test:
         ----------
             args: The positional arguments of fn
             kwargs: The key arguments of fn
-        
+
          Returns
         -------
             values: dict with 2 keys: 'pos_inputs' and 'key_inputs'
@@ -165,13 +182,11 @@ class Didatic_test:
         if not (run_prints_test is None):
             Didatic_test.run_prints_test = run_prints_test
 
-
     @staticmethod
     def __intercepted_input(prompt):
         val = Didatic_test.__input_fn_backup(prompt)
         Didatic_test.__intercepted_inputs_list.append(val)
         return val
-
 
     def run(self):
         """
@@ -212,7 +227,7 @@ class Didatic_test:
                 "test_failed": self.test_failed,
                 "test_done": self.test_done,
             }
-    
+
     def just_run(self):
         """
         just_run()
