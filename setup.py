@@ -83,6 +83,6 @@ setup(
     url="https://github.com/lmkawakami/didatictests",
     # Do not edit this string manually, always use bumpversion
     # Details in CONTRIBUTING.rst
-    version="0.0.5",
+    version="0.0.6",
     zip_safe=False,
 )
