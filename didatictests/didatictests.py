@@ -6,15 +6,71 @@ def tuplefy(thing):
 
 
 class Didatic_test:
+    """
+    A class to configure and run simple didatic tests
+
+    Didatic_test(Callable=None, args={}, test_name=None, keyboard_inputs=(), \
+        expected_output=None, expected_prints="", verbose=None, \
+            run_output_test=None, run_prints_test=None,
+    )
+
+    Parameters
+    ----------
+    fn: Callable
+        The function that will be tested
+    args: dict
+        The arguments that fn will be tested with. Use parse() to generate args,\
+             ex.: args = parse('a',5,7, x=1, s='aaa')
+    test_name: str
+        An optional identifier that will be printed with the test result
+    keyboard_inputs: Tuple[str, ...]
+        A tuple containig all the simulated keyboards inputs that will be used in \
+            every fn's input()
+    expected_output: Any
+        What the fn's return value should be
+    expected_prints: str
+        What the fn's internal print()'s concatenation should be \
+            (including new line character)
+    verbose: bool
+        Controls if all the fn's internal print()'s and input()'s prompts are printed
+    run_output_test: bool
+        Controls if the fn's return value is checked
+    run_prints_test: bool
+        Controls if the fn's internal print()'s are checked
+    """
+
     __print_fn_backup = builtins.print
     __input_fn_backup = builtins.input
 
     @staticmethod
     def parse_args(*args, **kwargs):
+        """
+        parse_args(args, kwargs)
+
+        Auxiliar function to pass fn's args and kwargs like in a normal fn call
+        Just passs the positional args first and then key arguments
+
+        ex.: parse_args(1,2,3,x=15,y=[0,0,1],z='aa')
+
+        Parameters
+        ----------
+            args: The positional arguments of fn
+            kwargs: The key arguments of fn
+        """
         return {"pos_inputs": args, "key_inputs": kwargs}
 
     @staticmethod
     def run_tests(tests):
+        """
+        run_tests(tests)
+
+        Run all the tests in the 'tests' list
+
+        Parameters
+        ----------
+            tests: list[Didatic_test]
+                A list of tests that you want to execute
+        """
         results = []
         number_of_tests = len(tests)
         completed_tests = 0
@@ -49,6 +105,24 @@ class Didatic_test:
 
     @staticmethod
     def set_defaults(fn=None, verbose=None, run_output_test=None, run_prints_test=None):
+        """
+        set_defaults(fn=None, verbose=None, run_output_test=None, run_prints_test None)
+
+        Set common default values fot the tests configs to avoid repetition when \
+            setting them up later
+
+        Parameters
+        ----------
+            fn: Callable
+                The function that will be tested
+            verbose: bool
+                Controls if all the fn's internal print()'s and \
+                    input()'s prompts are printed
+            run_output_test: bool
+                Controls if the fn's return value is checked
+            run_prints_test: bool
+                Controls if the fn's internal print()'s are checked
+        """
         if not (fn is None):
 
             def new_fn(self, *args, **kwargs):
@@ -61,6 +135,46 @@ class Didatic_test:
             Didatic_test.run_output_test = run_output_test
         if not (run_prints_test is None):
             Didatic_test.run_prints_test = run_prints_test
+
+    def run(self):
+        """
+        run()
+
+        Run the configured Didatic_test, print the result and \
+            returns a dictionary with the test outcome
+
+        {
+            "output_is_correct": bool,
+            "print_is_correct": bool,
+            "test_failed": bool,
+            "test_done": bool,
+        }
+        """
+
+        self.keyboard_inputs_list = list(self.keyboard_inputs)
+        self.__toggle_test_mode(True)
+        self.__flush_buffers()
+
+        try:
+            self.fn_output = self.fn(*self.args, **self.kwargs)
+            self.output_is_correct = self.fn_output == self.expected_output
+            self.print_is_correct = self.__prints_buffer == self.expected_prints
+            self.test_done = True
+
+        except Exception as excpt:
+            self.test_failed = True
+            self.test_exception = excpt
+
+        finally:
+            self.__toggle_test_mode(False)
+            self.__print_outcome()
+
+            return {
+                "output_is_correct": self.output_is_correct,
+                "print_is_correct": self.print_is_correct,
+                "test_failed": self.test_failed,
+                "test_done": self.test_done,
+            }
 
     def __init__(
         self,
@@ -149,52 +263,25 @@ class Didatic_test:
         self.__prints_buffer = ""
         self.__verbose_buffer = ""
 
-    def run(self):
-
-        self.keyboard_inputs_list = list(self.keyboard_inputs)
-        self.__toggle_test_mode(True)
-        self.__flush_buffers()
-
-        try:
-            self.fn_output = self.fn(*self.args, **self.kwargs)
-            self.output_is_correct = self.fn_output == self.expected_output
-            self.print_is_correct = self.__prints_buffer == self.expected_prints
-            self.test_done = True
-
-        except Exception as excpt:
-            self.test_failed = True
-            self.test_exception = excpt
-
-        finally:
-            self.__toggle_test_mode(False)
-            self.print_outcome()
-
-            return {
-                "output_is_correct": self.output_is_correct,
-                "print_is_correct": self.print_is_correct,
-                "test_failed": self.test_failed,
-                "test_done": self.test_done,
-            }
-
-    def print_outcome(self):
+    def __print_outcome(self):
         print(f"Case: {self.test_name}")
         if self.test_failed:
-            self.print_exception()
+            self.__print_exception()
             if self.verbose:
                 print(self.__verbose_buffer)
         else:
             if self.verbose:
                 print(self.__verbose_buffer)
-            self.print_result()
+            self.__print_result()
         print("---------------------------------------------------")
 
-    def print_exception(self):
+    def __print_exception(self):
         print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
         print(type(self.test_exception))
         print(self.test_exception.args)
         print(self.test_exception)
 
-    def print_result(self):
+    def __print_result(self):
         outputs_check = "✔️" if self.output_is_correct else "❌"
         prints_check = "✔️" if self.print_is_correct else "❌"
 
