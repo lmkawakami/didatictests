@@ -41,6 +41,31 @@ class Didatic_test:
 
     __print_fn_backup = builtins.print
     __input_fn_backup = builtins.input
+    __intercepted_inputs_list = []
+
+    @staticmethod
+    def input_interceptor(fn, args={}):
+        p_args = args.get("pos_inputs", ())
+        kwargs = args.get("key_inputs", {})
+        Didatic_test.__input_fn_backup = builtins.input
+        builtins.input = Didatic_test.__intercepted_input
+
+        try:
+            fn(*p_args, **kwargs)
+
+        except Exception as excpt:
+            print("Houston, we have a problem...")
+            print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
+            print(type(excpt))
+            print(excpt)
+            print(excpt)
+
+        finally:
+            builtins.input = Didatic_test.__input_fn_backup
+            intercepted_inputs = Didatic_test.__intercepted_inputs_list
+            Didatic_test.__intercepted_inputs_list = []
+
+            return intercepted_inputs
 
     @staticmethod
     def parse_args(*args, **kwargs):
@@ -139,6 +164,14 @@ class Didatic_test:
             Didatic_test.run_output_test = run_output_test
         if not (run_prints_test is None):
             Didatic_test.run_prints_test = run_prints_test
+
+
+    @staticmethod
+    def __intercepted_input(prompt):
+        val = Didatic_test.__input_fn_backup(prompt)
+        Didatic_test.__intercepted_inputs_list.append(val)
+        return val
+
 
     def run(self):
         """
