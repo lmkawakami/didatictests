@@ -1,5 +1,12 @@
 # didatictests
 
+[![PyPI version shields.io](https://img.shields.io/pypi/status/didatictests.svg)](https://pypi.org/project/didatictests/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/didatictests.svg)](https://pypi.org/project/didatictests/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/didatictests.svg)](https://pypi.org/project/didatictests/)
+[![Commits](https://img.shields.io/github/commits-since/lmkawakami/didatictests/v0.0.1.svg)](https://github.com/lmkawakami/didatictests/commits/main)
+[![GitHub latest commit](https://img.shields.io/github/last-commit/lmkawakami/didatictests/main)](https://github.com/lmkawakami/didatictests/commits/main)
+[![License](https://img.shields.io/github/license/lmkawakami/didatictests.svg)](https://github.com/lmkawakami/didatictests/blob/main/LICENSE)
+
 [![Build Status](https://github.com/lmkawakami/didatictests/workflows/Build%20Main/badge.svg)](https://github.com/lmkawakami/didatictests/actions)
 [![Documentation](https://github.com/lmkawakami/didatictests/workflows/Documentation/badge.svg)](https://lmkawakami.github.io/didatictests/)
 [![Code Coverage](https://codecov.io/gh/lmkawakami/didatictests/branch/main/graph/badge.svg)](https://codecov.io/gh/lmkawakami/didatictests)
