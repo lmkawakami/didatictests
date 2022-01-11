@@ -44,6 +44,82 @@ class Didatic_test:
     __intercepted_inputs_list = []
 
     @staticmethod
+    def auto_redefine(fn, input_verbose=False):
+        """
+        auto_redefine(fn, input_verbose=False)
+
+        Run fn normally once and save all the inputs, then return a\
+            redefined fn that reuses the same user inputs (simulated)
+        The args and kwarks continue to work normally
+
+        ex.: open_menu = auto_redefine(open_menu)
+
+        Parameters
+        ----------
+            fn: The function that will be called with intercepted inputs
+            input_verbose: flag that controls if the inputs primpts will be printed
+
+        Returns
+        -------
+            auto_redefined: Return a new function that will always use the same\
+                keyboard inputs as typed on the first run
+        """
+
+        inputs_list = Didatic_test.input_interceptor(fn)
+
+        def auto_redefined(*args, **kwargs):
+            keyboard_inputs = inputs_list[:]
+            Didatic_test.redefine(fn, keyboard_inputs, input_verbose)(*args, **kwargs)
+            keyboard_inputs = inputs_list[:]
+
+        return auto_redefined
+
+    @staticmethod
+    def redefine(fn, keyboard_inputs, input_verbose=False):
+        """
+        redefine(fn, keyboard_inputs,input_verbose=False)
+
+        Return a new function that will use the 'keyboard_inputs' tuple\
+            as simulated inputs, but will work as fn otherwise
+
+        ex.: call_menu = redefine(call_menu,('lorem ipsum','25','y','n'))
+
+        Parameters
+        ----------
+            fn: The function that will be copied but will use \
+                the simulated inputs
+            keyboard_inputs: The inputs that will be simulated
+
+        Returns
+        -------
+            refedined_fn: Return a fn copy that will always \
+                use the 'keyboard_inputs' as input simulation
+        """
+
+        def refedined_fn(*args, **kwargs):
+            inputs_list = list(keyboard_inputs)
+
+            def fake_input_fn(prompt):
+                fake_input = str(inputs_list.pop(0))
+                if input_verbose:
+                    print(prompt, fake_input)
+                return fake_input
+
+            input_fn_backup = builtins.input
+            builtins.input = fake_input_fn
+            try:
+                fn(*args, **kwargs)
+            except Exception as excpt:
+                print("Houston, we have a problem...")
+                print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
+                print(type(excpt))
+                print(excpt)
+            finally:
+                builtins.input = input_fn_backup
+
+        return refedined_fn
+
+    @staticmethod
     def input_interceptor(fn, args={}):
         """
         input_interceptor(fn, args)
@@ -57,7 +133,7 @@ class Didatic_test:
             fn: The function that will be called with intercepted inputs
             args: {'pos_inputs':(1,2,3), 'key_inputs':{'x':0, 'y':2}}
 
-         Returns
+        Returns
         -------
             input_list: a list of all user entries that were intercepted
         """
