@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>didatictests package &mdash; didatictests 0.0.6 documentation</title>
+  <title>didatictests package &mdash; didatictests 0.0.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.6
+                0.0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -139,6 +139,28 @@
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.auto_redefine">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auto_redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.auto_redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.auto_redefine" title="Permalink to this definition"></a></dt>
+<dd><p>Run fn normally once and save all the inputs, then return a            redefined fn that reuses the same user inputs (simulated)
+The args and kwarks continue to work normally</p>
+<p>ex.: open_menu = auto_redefine(open_menu)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</p></li>
+<li><p><strong>input_verbose</strong> (<em>flag that controls if the inputs primpts will be printed</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>auto_redefined</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Return a new function that will always use the same                keyboard inputs as typed on the first run</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.fn">
 <span class="sig-name descname"><span class="pre">fn</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#didatictests.didatictests.Didatic_test.fn" title="Permalink to this definition"></a></dt>
@@ -149,23 +171,20 @@
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_interceptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.input_interceptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.input_interceptor" title="Permalink to this definition"></a></dt>
 <dd><p>Intercept user inputs and copy them to a list for later use in test setup</p>
 <p>ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><dl class="simple">
-<dt><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</dt><dd><ul>
+<li><p><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</p></li>
 <li><p><strong>args</strong> (<em>{‘pos_inputs’:(1,2,3), ‘key_inputs’:{‘x’:0, ‘y’:2}}</em>)</p></li>
 </ul>
 </dd>
-</dl>
-</li>
-</ul>
-<p>Returns</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>input_list</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>a list of all user entries that were intercepted</p>
 </dd>
 </dl>
-<blockquote>
-<div><p>input_list: a list of all user entries that were intercepted</p>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -205,6 +224,27 @@ Just passs the positional args first and then key arguments</p>
 <blockquote>
 <div><p>values: dict with 2 keys: ‘pos_inputs’ and ‘key_inputs’</p>
 </div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.redefine">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.redefine" title="Permalink to this definition"></a></dt>
+<dd><p>Return a new function that will use the ‘keyboard_inputs’ tuple            as simulated inputs, but will work as fn otherwise</p>
+<p>ex.: call_menu = redefine(call_menu,(‘lorem ipsum’,’25’,’y’,’n’))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>The function that will be copied but will use                 the simulated inputs</em>)</p></li>
+<li><p><strong>keyboard_inputs</strong> (<em>The inputs that will be simulated</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>refedined_fn</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Return a fn copy that will always                 use the ‘keyboard_inputs’ as input simulation</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
