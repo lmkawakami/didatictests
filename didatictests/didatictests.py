@@ -1,4 +1,5 @@
 import builtins
+import sys
 
 
 def tuplefy(thing):
@@ -43,10 +44,128 @@ class Didatic_test:
     __input_fn_backup = builtins.input
     __intercepted_inputs_list = []
 
+    # Função input que inputs copia pro 'inputs' tbm (não retorna pra print original)
     @staticmethod
-    def auto_redefine(fn, input_verbose=False):
+    def __intercepted_input_fn(
+        inputs: list, verbose: bool = False, identifier: str = ""
+    ):
+        input_fn_backup = builtins.input
+        print_fn_backup = builtins.print
+
+        def new_input(prompt):
+            user_input = input_fn_backup(prompt)
+            if verbose:
+                print_fn_backup(f"{identifier}{prompt}{user_input}")
+            inputs.append(user_input)
+            return user_input
+
+        return new_input
+
+    # Função print que copia prints pro 'prints' tbm (não retorna pra print original)
+    @staticmethod
+    def __intercepted_print_fn(
+        prints: list, verbose: bool = False, identifier: str = ""
+    ):
+        print_fn_backup = builtins.print
+
+        def new_print(*objects, sep=" ", end="\n", file=sys.stdout, flush=False):
+            str_list = [str(obj) for obj in objects]
+            print_str = sep.join(str_list) + end
+            if verbose:
+                print_fn_backup(f"{identifier}{print_str}", sep="", end="")
+            prints.append(print_str)
+            return
+
+        return new_print
+
+    @staticmethod
+    def __fake_input_fn(fake_inputs, verbose=False):
+        fake_inputs = list(fake_inputs)
+
+        def fake_input_fn(prompt):
+            try:
+                fake_input = str(fake_inputs.pop(0))
+                if verbose:
+                    print(prompt, fake_input)
+                return fake_input
+
+            except Exception as excpt:
+                if excpt.args[0] == "pop from empty list":
+                    print("⚠️ Error! insufficient simulated inputs")
+                raise excpt
+
+        return fake_input_fn
+
+    # Redefine fn interceptando tudo: args, inputs, prints, output
+    @staticmethod
+    def intercepted_fn(
+        fn, interceptions, verbose=False, input_identifier="", print_identifier=""
+    ):
+        interceptions.setdefault("prints", [])
+        interceptions.setdefault("inputs", [])
+
+        def new_fn(*args, **kwargs):
+            input_fn_backup = builtins.input
+            print_fn_backup = builtins.print
+            builtins.input = Didatic_test.__intercepted_input_fn(
+                interceptions["inputs"], verbose, input_identifier
+            )
+            builtins.print = Didatic_test.__intercepted_print_fn(
+                interceptions["prints"], verbose, print_identifier
+            )
+            interceptions["args"] = args
+            interceptions["kwargs"] = kwargs
+            output = fn(*args, **kwargs)
+            interceptions["output"] = output
+            builtins.print = print_fn_backup
+            builtins.input = input_fn_backup
+            return output
+
+        return new_fn
+
+    @staticmethod
+    def stringify_args(args):
+        pos_args = args.get("pos_inputs", ())
+        key_args = args.get("key_inputs", ())
+        pos_args_str = str(pos_args).replace("(", "").replace(")", "")
+        key_args_str = ", ".join([f"{key}={value}" for key, value in key_args.items()])
+        args_str = ", ".join([pos_args_str, key_args_str]).strip(", ")
+        return f"({args_str})"
+
+    @staticmethod
+    def generate_test(
+        fn,
+        args,
+        test_name="Teste",
+        verbose=False,
+        run_output_test=True,
+        run_prints_test=False,
+        generator_verbose=False,
+    ):
+        interceptions = {}
+        intercepted_fn = Didatic_test.intercepted_fn(
+            fn, interceptions, generator_verbose, "[I]: ", "[O]: "
+        )
+
+        pos_args = args.get("pos_inputs", ())
+        key_args = args.get("key_inputs", {})
+        output = intercepted_fn(*pos_args, **key_args)
+
+        fn_name = fn.__name__
+        args_str = Didatic_test.stringify_args(args)
+        output_str = str(output)
+        prints_str = "".join(interceptions["prints"])
+
+        constructor_str = f"Didatic_test({fn_name}, Didatic_test.parse_args\
+            {args_str}, '{test_name}', {interceptions['inputs']}, {output_str}, \
+                '{prints_str}', {verbose}, {run_output_test}, {run_prints_test})"
+
+        return constructor_str
+
+    @staticmethod
+    def auto_redefine(fn, args={}, verbose=False):
         """
-        auto_redefine(fn, input_verbose=False)
+        auto_redefine(fn, verbose=False)
 
         Run fn normally once and save all the inputs, then return a\
             redefined fn that reuses the same user inputs (simulated)
@@ -57,7 +176,7 @@ class Didatic_test:
         Parameters
         ----------
             fn: The function that will be called with intercepted inputs
-            input_verbose: flag that controls if the inputs primpts will be printed
+            verbose: flag that controls if the inputs primpts will be printed
 
         Returns
         -------
@@ -65,19 +184,23 @@ class Didatic_test:
                 keyboard inputs as typed on the first run
         """
 
-        inputs_list = Didatic_test.input_interceptor(fn)
+        interceptions = {}
+        intercepted_fn = Didatic_test.intercepted_fn(
+            fn, interceptions, verbose, "[I]: ", "[O]: "
+        )
 
-        def auto_redefined(*args, **kwargs):
-            keyboard_inputs = inputs_list[:]
-            Didatic_test.redefine(fn, keyboard_inputs, input_verbose)(*args, **kwargs)
-            keyboard_inputs = inputs_list[:]
+        pos_args = args.get("pos_inputs", ())
+        key_args = args.get("key_inputs", {})
+        intercepted_fn(*pos_args, **key_args)
 
+        inputs_list = interceptions["inputs"]
+        auto_redefined = Didatic_test.redefine(fn, inputs_list, verbose)
         return auto_redefined
 
     @staticmethod
-    def redefine(fn, keyboard_inputs, input_verbose=False):
+    def redefine(fn, keyboard_inputs, verbose=False):
         """
-        redefine(fn, keyboard_inputs,input_verbose=False)
+        redefine(fn, keyboard_inputs, verbose=False)
 
         Return a new function that will use the 'keyboard_inputs' tuple\
             as simulated inputs, but will work as fn otherwise
@@ -99,66 +222,18 @@ class Didatic_test:
         def refedined_fn(*args, **kwargs):
             inputs_list = list(keyboard_inputs)
 
-            def fake_input_fn(prompt):
-                fake_input = str(inputs_list.pop(0))
-                if input_verbose:
-                    print(prompt, fake_input)
-                return fake_input
-
             input_fn_backup = builtins.input
-            builtins.input = fake_input_fn
+            builtins.input = Didatic_test.__fake_input_fn(inputs_list, verbose)
+
             try:
-                fn(*args, **kwargs)
+                output = fn(*args, **kwargs)
             except Exception as excpt:
-                print("Houston, we have a problem...")
-                print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
-                print(type(excpt))
-                print(excpt)
+                raise excpt
             finally:
                 builtins.input = input_fn_backup
+            return output
 
         return refedined_fn
-
-    @staticmethod
-    def input_interceptor(fn, args={}):
-        """
-        input_interceptor(fn, args)
-
-        Intercept user inputs and copy them to a list for later use in test setup
-
-        ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))
-
-        Parameters
-        ----------
-            fn: The function that will be called with intercepted inputs
-            args: {'pos_inputs':(1,2,3), 'key_inputs':{'x':0, 'y':2}}
-
-        Returns
-        -------
-            input_list: a list of all user entries that were intercepted
-        """
-
-        p_args = args.get("pos_inputs", ())
-        kwargs = args.get("key_inputs", {})
-        Didatic_test.__input_fn_backup = builtins.input
-        builtins.input = Didatic_test.__intercepted_input
-
-        try:
-            fn(*p_args, **kwargs)
-
-        except Exception as excpt:
-            print("Houston, we have a problem...")
-            print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
-            print(type(excpt))
-            print(excpt)
-            print(excpt)
-
-        finally:
-            builtins.input = Didatic_test.__input_fn_backup
-            intercepted_inputs = Didatic_test.__intercepted_inputs_list
-            Didatic_test.__intercepted_inputs_list = []
-
-            return intercepted_inputs
 
     @staticmethod
     def parse_args(*args, **kwargs):
@@ -175,7 +250,7 @@ class Didatic_test:
             args: The positional arguments of fn
             kwargs: The key arguments of fn
 
-         Returns
+        Returns
         -------
             values: dict with 2 keys: 'pos_inputs' and 'key_inputs'
         """
@@ -258,12 +333,6 @@ class Didatic_test:
         if not (run_prints_test is None):
             Didatic_test.run_prints_test = run_prints_test
 
-    @staticmethod
-    def __intercepted_input(prompt):
-        val = Didatic_test.__input_fn_backup(prompt)
-        Didatic_test.__intercepted_inputs_list.append(val)
-        return val
-
     def run(self):
         """
         run()
@@ -278,15 +347,19 @@ class Didatic_test:
             "test_done": bool,
         }
         """
-
         self.keyboard_inputs_list = list(self.keyboard_inputs)
-        self.__toggle_test_mode(True)
-        self.__flush_buffers()
+        self.interceptions = {}
+        fn_temp = Didatic_test.intercepted_fn(
+            self.fn, self.interceptions, self.verbose, "[I]: ", "[P]: "
+        )
+        new_fn = Didatic_test.redefine(fn_temp, self.keyboard_inputs_list, False)
 
         try:
-            self.fn_output = self.fn(*self.args, **self.kwargs)
-            self.output_is_correct = self.fn_output == self.expected_output
-            self.print_is_correct = self.__prints_buffer == self.expected_prints
+            new_fn(*self.args, **self.kwargs)
+            fn_output = self.interceptions["output"]
+            self.output_is_correct = fn_output == self.expected_output
+            fn_prints = "".join(self.interceptions["prints"])
+            self.print_is_correct = fn_prints == self.expected_prints
             self.test_done = True
 
         except Exception as excpt:
@@ -294,8 +367,12 @@ class Didatic_test:
             self.test_exception = excpt
 
         finally:
-            self.__toggle_test_mode(False)
-            self.__print_outcome()
+            print(f"Case: {self.test_name}")
+            if self.test_failed:
+                self.__print_exception()
+            else:
+                self.__print_result()
+            print("---------------------------------------------------")
 
             return {
                 "output_is_correct": self.output_is_correct,
@@ -318,33 +395,27 @@ class Didatic_test:
             "test_done": bool,
         }
         """
-
         self.keyboard_inputs_list = list(self.keyboard_inputs)
-        self.__toggle_test_mode(True)
-        self.__flush_buffers()
+        self.interceptions = {}
+        fn_temp = Didatic_test.intercepted_fn(
+            self.fn, self.interceptions, self.verbose, "[I]: ", "[P]: "
+        )
+        new_fn = Didatic_test.redefine(fn_temp, self.keyboard_inputs_list, False)
 
+        print(f"Case: {self.test_name}")
         try:
-            self.fn(*self.args, **self.kwargs)
-            self.test_done = True
+            new_fn(*self.args, **self.kwargs)
 
         except Exception as excpt:
-            self.test_failed = True
             self.test_exception = excpt
-
-        finally:
-            self.__toggle_test_mode(False)
-            self.__print_buffer()
-            if self.test_failed:
-                self.__print_exception()
-
-            return self.test_done and not self.test_failed
+            self.__print_exception()
 
     def __init__(
         self,
         fn=None,
         args={},
-        test_name=None,
-        keyboard_inputs=(),
+        test_name="Test",
+        keyboard_inputs=[],
         expected_output=None,
         expected_prints="",
         verbose=None,
@@ -356,7 +427,7 @@ class Didatic_test:
         self.args = args.get("pos_inputs", ())
         self.kwargs = args.get("key_inputs", {})
         self.test_name = test_name
-        self.keyboard_inputs = tuplefy(keyboard_inputs)
+        self.keyboard_inputs = keyboard_inputs
         self.expected_output = expected_output
         self.expected_prints = expected_prints
         if not (verbose is None):
@@ -368,25 +439,23 @@ class Didatic_test:
 
         self.test_done = False
         self.test_failed = False
-        self.output_is_correct = False
-        self.print_is_correct = False
+        self.output_is_correct = None
+        self.print_is_correct = None
         self.test_exception = None
-        self.__prints_buffer = ""
-        self.__verbose_buffer = ""
+        self.interceptions = {}
 
     def __repr__(self) -> str:
-        return f"""
-    fn: {self.fn.__name__}
-    args: {self.args}
-    kwargs: {self.kwargs}
-    test_name: {self.test_name}
-    keyboard_inputs: {self.keyboard_inputs}
-    expected_output: {self.expected_output}
-    expected_prints: {self.expected_prints}
-    verbose: {self.verbose}
-    run_output_test: {self.run_output_test}
-    run_prints_test: {self.run_prints_test}
-    """
+        return f"fn: {self.fn.__name__}/n\
+            args: {self.args}/n\
+            kwargs: {self.kwargs}/n\
+            test_name: {self.test_name}/n\
+            keyboard_inputs: {self.keyboard_inputs}/n\
+            expected_output: {self.expected_output}/n\
+            expected_prints: {self.expected_prints}/n\
+            verbose: {self.verbose}/n\
+            run_output_test: {self.run_output_test}/n\
+            run_prints_test: {self.run_prints_test}/n\
+            interceptions: {str(self.interceptions)}"
 
     def __testing_input(self, prompt):
 
@@ -426,18 +495,6 @@ class Didatic_test:
         self.__prints_buffer = ""
         self.__verbose_buffer = ""
 
-    def __print_outcome(self):
-        print(f"Case: {self.test_name}")
-        if self.test_failed:
-            self.__print_exception()
-            if self.verbose:
-                self.__print_buffer()
-        else:
-            if self.verbose:
-                print(self.__verbose_buffer)
-            self.__print_result()
-        print("---------------------------------------------------")
-
     def __print_buffer(self):
         print(self.__verbose_buffer)
 
@@ -460,7 +517,7 @@ class Didatic_test:
         remaining_keyboard_inputs_warning = (
             f"⚠️☢️ Warning!!! some inputs were not used: \
               {self.keyboard_inputs_list}"
-            if len(self.keyboard_inputs_list)
+            if len(self.keyboard_inputs_list) > len(self.interceptions["inputs"])
             else ""
         )
 
@@ -470,8 +527,8 @@ class Didatic_test:
         )
 
         if (not self.output_is_correct) or (not self.print_is_correct):
-            stripped_print_buffer = self.__prints_buffer.replace("\n", " | ").rstrip(
-                " | "
+            stripped_print_buffer = (
+                "".join(self.interceptions["prints"]).replace("\n", " | ").rstrip(" | ")
             )
             stripped_expected_prints = self.expected_prints.replace("\n", " | ").rstrip(
                 " | "
@@ -480,7 +537,8 @@ class Didatic_test:
             fn_args_line = f"   ➖ Function args:      {self.args} {self.kwargs}"
             keyboard_inputs_line = f"\n   ➖ Keyboard inputs:    {self.keyboard_inputs}"
             output_line = (
-                f"\n   {outputs_check} Function outputs:   {self.fn_output}"
+                f"\n   {outputs_check} Function outputs:   \
+                    {self.interceptions['output']}"
                 if self.run_output_test
                 else ""
             )
