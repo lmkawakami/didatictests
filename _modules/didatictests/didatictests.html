@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>didatictests.didatictests &mdash; didatictests 0.0.7 documentation</title>
+  <title>didatictests.didatictests &mdash; didatictests 0.0.8 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
             <a href="../../index.html" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.7
+                0.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -93,10 +93,7 @@
              
   <h1>Source code for didatictests.didatictests</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">builtins</span>
-
-
-<div class="viewcode-block" id="tuplefy"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.tuplefy">[docs]</a><span class="k">def</span> <span class="nf">tuplefy</span><span class="p">(</span><span class="n">thing</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">thing</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span> <span class="k">else</span> <span class="p">(</span><span class="n">thing</span><span class="p">,)</span></div>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 
 <div class="viewcode-block" id="Didatic_test"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test">[docs]</a><span class="k">class</span> <span class="nc">Didatic_test</span><span class="p">:</span>
@@ -133,14 +130,182 @@
 <span class="sd">        Controls if the fn&#39;s internal print()&#39;s are checked</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">__print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
-    <span class="n">__input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
-    <span class="n">__intercepted_inputs_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Função input que inputs copia pro &#39;inputs&#39; tbm (não retorna pra print original)</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__intercepted_input_fn</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">):</span>
+        <span class="n">input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
+        <span class="n">print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
+
+        <span class="k">def</span> <span class="nf">new_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+            <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_fn_backup</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">print_fn_backup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">identifier</span><span class="si">}{</span><span class="n">prompt</span><span class="si">}{</span><span class="n">user_input</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">user_input</span>
+
+        <span class="k">return</span> <span class="n">new_input</span>
+
+    <span class="c1"># Função print que copia prints pro &#39;prints&#39; tbm (não retorna pra print original)</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__intercepted_print_fn</span><span class="p">(</span>
+        <span class="n">prints</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">):</span>
+        <span class="n">print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
+
+        <span class="k">def</span> <span class="nf">new_print</span><span class="p">(</span><span class="o">*</span><span class="n">objects</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">str_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
+            <span class="n">print_str</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">str_list</span><span class="p">)</span> <span class="o">+</span> <span class="n">end</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">print_fn_backup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">identifier</span><span class="si">}{</span><span class="n">print_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">prints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">print_str</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">return</span> <span class="n">new_print</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__fake_input_fn</span><span class="p">(</span><span class="n">fake_inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">fake_inputs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fake_inputs</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">fake_input_fn</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">fake_input</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fake_inputs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">fake_input</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">fake_input</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">excpt</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pop from empty list&quot;</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️ Error! insufficient simulated inputs&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">excpt</span>
+
+        <span class="k">return</span> <span class="n">fake_input_fn</span>
+
+    <span class="c1"># Redefine fn interceptando tudo: args, inputs, prints, output</span>
+<div class="viewcode-block" id="Didatic_test.intercepted_fn"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.intercepted_fn">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">intercepted_fn</span><span class="p">(</span>
+        <span class="n">fn</span><span class="p">,</span> <span class="n">interceptions</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">input_identifier</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">print_identifier</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">):</span>
+        <span class="n">interceptions</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;prints&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">interceptions</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="k">def</span> <span class="nf">new_fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
+            <span class="n">print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
+            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_input_fn</span><span class="p">(</span>
+                <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">input_identifier</span>
+            <span class="p">)</span>
+            <span class="n">builtins</span><span class="o">.</span><span class="n">print</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_print_fn</span><span class="p">(</span>
+                <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;prints&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">print_identifier</span>
+            <span class="p">)</span>
+            <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+            <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
+            <span class="n">builtins</span><span class="o">.</span><span class="n">print</span> <span class="o">=</span> <span class="n">print_fn_backup</span>
+            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">input_fn_backup</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+        <span class="k">return</span> <span class="n">new_fn</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__stringify_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="n">quotes</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span>
+        <span class="n">pos_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">key_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key_inputs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">pos_args_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos_args</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">key_args_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">quotes</span><span class="o">+</span><span class="n">value</span><span class="o">+</span><span class="n">quotes</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">==</span><span class="nb">str</span> <span class="k">else</span> <span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">key_args</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">args_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">pos_args_str</span><span class="p">,</span> <span class="n">key_args_str</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">args_str</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Didatic_test.generate_test"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.generate_test">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_test</span><span class="p">(</span>
+        <span class="n">fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">test_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">run_output_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">run_prints_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">generator_verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generate_test(fn, args, test_name=&quot;Test&quot;, verbose=False, \</span>
+<span class="sd">        run_output_test=True, run_prints_test=False, generator_verbose=False,)</span>
+
+<span class="sd">        Run the function once using ther given &#39;args&#39; and intercepts all\</span>
+<span class="sd">            the inpus, prints and outpus</span>
+<span class="sd">        Generate and return the string to create the test with the given configs.\</span>
+<span class="sd">            and the intercepted infos.</span>
+
+<span class="sd">        ex.: generate_test(fn, Didatic_test.parse_args(1,2,3), &quot;Test-5&quot;, True, True)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            fn: The function that will be tested</span>
+
+
+<span class="sd">            args: dict in the format {&quot;pos_inputs&quot;: args, &quot;key_inputs&quot;: kwargs}</span>
+<span class="sd">            test_name: test name to identify the results and hint the type of test</span>
+<span class="sd">            verbose: controls if the fn&#39;s internal inputs and prints will be printed</span>
+<span class="sd">            run_output_test: controls if the output of the test run will be checked \</span>
+<span class="sd">                against the expected output value</span>
+<span class="sd">            run_prints_test: controls if the prints of the test run will be checked \</span>
+<span class="sd">                against the expected prints</span>
+<span class="sd">            generator_verbose: controls if the fn&#39;s internal inputs and prints \</span>
+<span class="sd">                will be printed in the fist run (the interception run)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            constructor_str: Return the string with the test constuctor containing\</span>
+<span class="sd">                all the configurations and args predefined, and with the intecepted\</span>
+<span class="sd">                    inputs, prints and outputs as the expected values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_fn</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">verbose</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_verbose</span> <span class="ow">or</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">run_output_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">run_output_test</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_run_output_test</span> <span class="ow">or</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">run_prints_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">run_prints_test</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_run_prints_test</span> <span class="ow">or</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">generator_verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_generator_verbose</span> <span class="o">=</span> <span class="n">generator_verbose</span> <span class="ow">or</span> <span class="kc">False</span>
+
+        <span class="n">interceptions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">intercepted_fn</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">intercepted_fn</span><span class="p">(</span>
+            <span class="n">fn</span><span class="p">,</span> <span class="n">interceptions</span><span class="p">,</span> <span class="n">generator_verbose</span><span class="p">,</span> <span class="s2">&quot;[I]: &quot;</span><span class="p">,</span> <span class="s2">&quot;[O]: &quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">pos_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">key_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key_inputs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">intercepted_fn</span><span class="p">(</span><span class="o">*</span><span class="n">pos_args</span><span class="p">,</span> <span class="o">**</span><span class="n">key_args</span><span class="p">)</span>
+
+        <span class="n">fn_name</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">args_str</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__stringify_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">output_str</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">output</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">prints_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;prints&quot;</span><span class="p">])</span>
+
+        <span class="n">constructor_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Didatic_test(</span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2">, Didatic_test.parse_args</span><span class="se">\</span>
+<span class="si">{</span><span class="n">args_str</span><span class="si">}</span><span class="s2">, &#39;</span><span class="si">{</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&#39;, </span><span class="si">{</span><span class="n">interceptions</span><span class="p">[</span><span class="s1">&#39;inputs&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">output_str</span><span class="si">}</span><span class="s2">, </span><span class="se">\</span>
+<span class="s2">&#39;</span><span class="si">{</span><span class="n">prints_str</span><span class="si">}</span><span class="s2">&#39;, </span><span class="si">{</span><span class="n">verbose</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">run_output_test</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">run_prints_test</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+        <span class="k">return</span> <span class="n">constructor_str</span></div>
 
 <div class="viewcode-block" id="Didatic_test.auto_redefine"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.auto_redefine">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">auto_redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">input_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">auto_redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        auto_redefine(fn, input_verbose=False)</span>
+<span class="sd">        auto_redefine(fn, verbose=False)</span>
 
 <span class="sd">        Run fn normally once and save all the inputs, then return a\</span>
 <span class="sd">            redefined fn that reuses the same user inputs (simulated)</span>
@@ -151,7 +316,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            fn: The function that will be called with intercepted inputs</span>
-<span class="sd">            input_verbose: flag that controls if the inputs primpts will be printed</span>
+<span class="sd">            verbose: flag that controls if the inputs primpts will be printed</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -159,19 +324,23 @@
 <span class="sd">                keyboard inputs as typed on the first run</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">inputs_list</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">input_interceptor</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="n">interceptions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">intercepted_fn</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">intercepted_fn</span><span class="p">(</span>
+            <span class="n">fn</span><span class="p">,</span> <span class="n">interceptions</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="s2">&quot;[I]: &quot;</span><span class="p">,</span> <span class="s2">&quot;[O]: &quot;</span>
+        <span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">auto_redefined</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="n">inputs_list</span><span class="p">[:]</span>
-            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">keyboard_inputs</span><span class="p">,</span> <span class="n">input_verbose</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="n">inputs_list</span><span class="p">[:]</span>
+        <span class="n">pos_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">key_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key_inputs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">intercepted_fn</span><span class="p">(</span><span class="o">*</span><span class="n">pos_args</span><span class="p">,</span> <span class="o">**</span><span class="n">key_args</span><span class="p">)</span>
 
+        <span class="n">inputs_list</span> <span class="o">=</span> <span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">]</span>
+        <span class="n">auto_redefined</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">inputs_list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">auto_redefined</span></div>
 
 <div class="viewcode-block" id="Didatic_test.redefine"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.redefine">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">keyboard_inputs</span><span class="p">,</span> <span class="n">input_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">redefine</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">keyboard_inputs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        redefine(fn, keyboard_inputs,input_verbose=False)</span>
+<span class="sd">        redefine(fn, keyboard_inputs, verbose=False)</span>
 
 <span class="sd">        Return a new function that will use the &#39;keyboard_inputs&#39; tuple\</span>
 <span class="sd">            as simulated inputs, but will work as fn otherwise</span>
@@ -193,66 +362,18 @@
         <span class="k">def</span> <span class="nf">refedined_fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">inputs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">keyboard_inputs</span><span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">fake_input_fn</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
-                <span class="n">fake_input</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inputs_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">input_verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">fake_input</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">fake_input</span>
-
             <span class="n">input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">fake_input_fn</span>
+            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__fake_input_fn</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Houston, we have a problem...&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚨⚠️🚨⚠️🚨 Error! 💀💀💀&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">excpt</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">excpt</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">excpt</span>
             <span class="k">finally</span><span class="p">:</span>
                 <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">input_fn_backup</span>
+            <span class="k">return</span> <span class="n">output</span>
 
         <span class="k">return</span> <span class="n">refedined_fn</span></div>
-
-<div class="viewcode-block" id="Didatic_test.input_interceptor"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.input_interceptor">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">input_interceptor</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        input_interceptor(fn, args)</span>
-
-<span class="sd">        Intercept user inputs and copy them to a list for later use in test setup</span>
-
-<span class="sd">        ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">            fn: The function that will be called with intercepted inputs</span>
-<span class="sd">            args: {&#39;pos_inputs&#39;:(1,2,3), &#39;key_inputs&#39;:{&#39;x&#39;:0, &#39;y&#39;:2}}</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">            input_list: a list of all user entries that were intercepted</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">p_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">,</span> <span class="p">())</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key_inputs&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
-        <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_input</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">p_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Houston, we have a problem...&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚨⚠️🚨⚠️🚨 Error! 💀💀💀&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">excpt</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">excpt</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">excpt</span><span class="p">)</span>
-
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__input_fn_backup</span>
-            <span class="n">intercepted_inputs</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_inputs_list</span>
-            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_inputs_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="k">return</span> <span class="n">intercepted_inputs</span></div>
 
 <div class="viewcode-block" id="Didatic_test.parse_args"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.parse_args">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -269,7 +390,7 @@
 <span class="sd">            args: The positional arguments of fn</span>
 <span class="sd">            kwargs: The key arguments of fn</span>
 
-<span class="sd">         Returns</span>
+<span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            values: dict with 2 keys: &#39;pos_inputs&#39; and &#39;key_inputs&#39;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -297,6 +418,8 @@
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tests</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">test_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">test</span><span class="o">.</span><span class="n">test_name</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">test</span><span class="o">.</span><span class="n">test_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">test</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
             <span class="n">correct_outputs_tests</span> <span class="o">+=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;output_is_correct&quot;</span><span class="p">]</span>
             <span class="n">correct_prints_tests</span> <span class="o">+=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;print_is_correct&quot;</span><span class="p">]</span>
@@ -352,11 +475,50 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">run_prints_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">Didatic_test</span><span class="o">.</span><span class="n">run_prints_test</span> <span class="o">=</span> <span class="n">run_prints_test</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__intercepted_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__input_fn_backup</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
-        <span class="n">Didatic_test</span><span class="o">.</span><span class="n">__intercepted_inputs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">val</span>
+<div class="viewcode-block" id="Didatic_test.set_generator_defaults"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.set_generator_defaults">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_generator_defaults</span><span class="p">(</span>
+        <span class="n">fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">run_output_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">run_prints_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">generator_verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        set_generator_defaults(fn=None, verbose=None, run_output_test=None, \</span>
+<span class="sd">            run_prints_test=None, generator_verbose=None)</span>
+
+<span class="sd">        Set common default values fot the test generator to avoid unnecessary repetition</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            fn: Callable</span>
+<span class="sd">                The function that will be tested</span>
+<span class="sd">            verbose: bool</span>
+<span class="sd">                Controls if all the fn&#39;s internal print()&#39;s and \</span>
+<span class="sd">                    input()&#39;s prompts are printed when a test runs</span>
+<span class="sd">            run_output_test: bool</span>
+<span class="sd">                Controls if the fn&#39;s return value is tested</span>
+<span class="sd">            run_prints_test: bool</span>
+<span class="sd">                Controls if the fn&#39;s internal print()&#39;s are tested</span>
+<span class="sd">            generator_verbose: bool</span>
+<span class="sd">                Controls if all the fn&#39;s internal print()&#39;s and\</span>
+<span class="sd">                    input()&#39;s prompts are printed on the test\</span>
+<span class="sd">                        generator run</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_fn</span> <span class="o">=</span> <span class="n">fn</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">run_output_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_run_output_test</span> <span class="o">=</span> <span class="n">run_output_test</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">run_prints_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_run_prints_test</span> <span class="o">=</span> <span class="n">run_prints_test</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">generator_verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">Didatic_test</span><span class="o">.</span><span class="n">default_generator_verbose</span> <span class="o">=</span> <span class="n">generator_verbose</span></div>
 
 <div class="viewcode-block" id="Didatic_test.run"><a class="viewcode-back" href="../../didatictests.html#didatictests.didatictests.Didatic_test.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -372,15 +534,19 @@
 <span class="sd">            &quot;test_done&quot;: bool,</span>
 <span class="sd">        }</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__toggle_test_mode</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__flush_buffers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fn_temp</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">intercepted_fn</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="s2">&quot;[I]: &quot;</span><span class="p">,</span> <span class="s2">&quot;[P]: &quot;</span>
+        <span class="p">)</span>
+        <span class="n">new_fn</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">redefine</span><span class="p">(</span><span class="n">fn_temp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fn_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn_output</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">print_is_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prints_buffer</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span>
+            <span class="n">new_fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fn_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span> <span class="o">=</span> <span class="n">fn_output</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span>
+            <span class="n">fn_prints</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;prints&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_is_correct</span> <span class="o">=</span> <span class="n">fn_prints</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_done</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
@@ -388,8 +554,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span> <span class="o">=</span> <span class="n">excpt</span>
 
         <span class="k">finally</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__toggle_test_mode</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__print_outcome</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Case: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__print_exception</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__print_result</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------------&quot;</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="p">{</span>
                 <span class="s2">&quot;output_is_correct&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span><span class="p">,</span>
@@ -412,33 +582,27 @@
 <span class="sd">            &quot;test_done&quot;: bool,</span>
 <span class="sd">        }</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__toggle_test_mode</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__flush_buffers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fn_temp</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">intercepted_fn</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="s2">&quot;[I]: &quot;</span><span class="p">,</span> <span class="s2">&quot;[P]: &quot;</span>
+        <span class="p">)</span>
+        <span class="n">new_fn</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="o">.</span><span class="n">redefine</span><span class="p">(</span><span class="n">fn_temp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Case: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">test_done</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">new_fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">excpt</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span> <span class="o">=</span> <span class="n">excpt</span>
-
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__toggle_test_mode</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__print_buffer</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__print_exception</span><span class="p">()</span>
-
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_done</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__print_exception</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">test_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">keyboard_inputs</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">test_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+        <span class="n">keyboard_inputs</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">expected_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">expected_prints</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -450,7 +614,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pos_inputs&quot;</span><span class="p">,</span> <span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key_inputs&quot;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_name</span> <span class="o">=</span> <span class="n">test_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="n">tuplefy</span><span class="p">(</span><span class="n">keyboard_inputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="n">keyboard_inputs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span> <span class="o">=</span> <span class="n">expected_output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span> <span class="o">=</span> <span class="n">expected_prints</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -462,78 +626,23 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">test_done</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">print_is_correct</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_is_correct</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_exception</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__prints_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    fn: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    test_name: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    keyboard_inputs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    expected_output: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    expected_prints: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    verbose: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    run_output_test: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_output_test</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    run_prints_test: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_prints_test</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__testing_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">):</span>
-
-        <span class="n">test_input</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span> <span class="o">+=</span> <span class="s2">&quot;[I]: &quot;</span> <span class="o">+</span> <span class="n">prompt</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">test_input</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">return</span> <span class="n">test_input</span>
-
-    <span class="k">def</span> <span class="nf">__redefine_input_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_mode</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">test_mode</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__input_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">input</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__testing_input</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_fn_backup</span>
-
-    <span class="k">def</span> <span class="nf">__testing_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]))</span> <span class="o">+</span> <span class="n">end</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span> <span class="o">+=</span> <span class="s2">&quot;[P]: &quot;</span> <span class="o">+</span> <span class="n">prompt</span>
-        <span class="c1"># Filtrar linhas que começam com &#39;[DBG]&#39;</span>
-        <span class="c1"># para usálas como debug sem comprometer os testes de comparação de print</span>
-        <span class="k">if</span> <span class="n">prompt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;[DBG]&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__prints_buffer</span> <span class="o">+=</span> <span class="n">prompt</span>
-
-    <span class="k">def</span> <span class="nf">__redefine_print_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_mode</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">test_mode</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__print_fn_backup</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">print</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">print</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__testing_print</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">builtins</span><span class="o">.</span><span class="n">print</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__print_fn_backup</span>
-
-    <span class="k">def</span> <span class="nf">__toggle_test_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_mode</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__redefine_input_fn</span><span class="p">(</span><span class="n">test_mode</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__redefine_print_fn</span><span class="p">(</span><span class="n">test_mode</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__flush_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__prints_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__print_outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Case: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_failed</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__print_exception</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__print_buffer</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__print_result</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------------&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__print_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__verbose_buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;fn: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            test_name: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            keyboard_inputs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            expected_output: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_output</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            expected_prints: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            verbose: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            run_output_test: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_output_test</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            run_prints_test: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_prints_test</span><span class="si">}</span><span class="s2">/n</span><span class="se">\</span>
+<span class="s2">            interceptions: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">__print_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚨⚠️🚨⚠️🚨 Error! 💀💀💀&quot;</span><span class="p">)</span>
@@ -554,7 +663,7 @@
         <span class="n">remaining_keyboard_inputs_warning</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;⚠️☢️ Warning!!! some inputs were not used: </span><span class="se">\</span>
 <span class="s2">              </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">])</span>
             <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="p">)</span>
 
@@ -564,8 +673,8 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_is_correct</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_is_correct</span><span class="p">):</span>
-            <span class="n">stripped_print_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prints_buffer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span>
-                <span class="s2">&quot; | &quot;</span>
+            <span class="n">stripped_print_buffer</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">[</span><span class="s2">&quot;prints&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot; | &quot;</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">stripped_expected_prints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_prints</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span>
                 <span class="s2">&quot; | &quot;</span>
@@ -574,7 +683,8 @@
             <span class="n">fn_args_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;   ➖ Function args:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">keyboard_inputs_line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   ➖ Keyboard inputs:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyboard_inputs</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">output_line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">outputs_check</span><span class="si">}</span><span class="s2"> Function outputs:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_output</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   </span><span class="si">{</span><span class="n">outputs_check</span><span class="si">}</span><span class="s2"> Function outputs:   </span><span class="se">\</span>
+<span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">interceptions</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_output_test</span>
                 <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="p">)</span>

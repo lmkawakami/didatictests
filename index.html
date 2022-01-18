@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to didatictests’s documentation! &mdash; didatictests 0.0.7 documentation</title>
+  <title>Welcome to didatictests’s documentation! &mdash; didatictests 0.0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="#" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.7
+                0.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -118,9 +118,19 @@
 <li><p>Build simple tests to validate functions prints and outputs with configurable args, kwargs and simulated user inputs</p></li>
 </ul>
 </section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p><strong>Stable Release:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">didatictests</span></code><span class="raw-html-m2r"><br></span>
+<strong>Development Head:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/lmkawakami/didatictests.git</span></code></p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="notebooks/exemplos.ipynb">Notebook showcase em português</a></p>
+<p>For full package documentation please visit <a class="reference external" href="https://lmkawakami.github.io/didatictests">lmkawakami.github.io/didatictests</a>.</p>
+</section>
 <section id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">didatictests</span> <span class="kn">import</span> <span class="n">Didatic_test</span> <span class="k">as</span> <span class="n">Dt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">didatictests</span> <span class="kn">import</span> <span class="n">Didatic_test</span>
 </pre></div>
 </div>
 <p>Demo function: <code class="docutils literal notranslate"><span class="pre">the_function(arg)</span></code>:</p>
@@ -132,26 +142,26 @@
 <li><p>return <code class="docutils literal notranslate"><span class="pre">total</span></code></p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">the_function</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
-  <span class="n">inp</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;One number, please: &quot;</span><span class="p">)</span>
-  <span class="n">total</span> <span class="o">=</span> <span class="n">arg</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">total</span>
+    <span class="n">inp</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;One number, please: &quot;</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">arg</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span>
 </pre></div>
 </div>
 <p>Create and run some tests:</p>
 <hr class="docutils" />
 <section id="test-1">
 <h3>Test-1<a class="headerlink" href="#test-1" title="Permalink to this headline"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test1</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
-  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
-  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
-  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
-  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;This one shall pass!&#39;</span><span class="p">,</span>
-  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
-  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
-  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test1</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="p">(</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+    <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;This one shall pass!&#39;</span><span class="p">,</span>
+    <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">test1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -175,16 +185,16 @@ Case: This one shall pass!
 <hr class="docutils" />
 <section id="test-2">
 <h3>Test-2<a class="headerlink" href="#test-2" title="Permalink to this headline"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test2</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
-  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
-  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
-  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
-  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;You Shall Not Pass!!!&#39;</span><span class="p">,</span>
-  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
-  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;13</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
-  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test2</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="p">(</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+    <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">),</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;You Shall Not Pass!!!&#39;</span><span class="p">,</span>
+    <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;13</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">test2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -197,9 +207,9 @@ Case: You Shall Not Pass!!!
 [I]: One number, please:  2</p></li>
 </ul>
 <dl>
-<dt>outputs: ✔️  prints: ❌<span class="raw-html-m2r"><br></span></dt><dd><p>➖ Function args:      (40,) {}
+<dt>outputs: ✔️  prints: ❌</dt><dd><p>➖ Function args:      (40,) {}
 ➖ Keyboard inputs:    (‘2’,)
-✔️ Function outputs:   42<span class="raw-html-m2r"><br></span>
+✔️ Function outputs:   42
 ➖ Expected output:    42
 ❌ fn internal prints: 42</p>
 <p>➖ Expected prints:    13</p>
@@ -215,16 +225,16 @@ Case: You Shall Not Pass!!!
 <hr class="docutils" />
 <section id="test-3">
 <h3>Test-3<a class="headerlink" href="#test-3" title="Permalink to this headline"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test3</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span>
-  <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
-  <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="s1">&#39;forty&#39;</span><span class="p">),</span>
-  <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;two&#39;</span><span class="p">),</span>
-  <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;Error demo&#39;</span><span class="p">,</span>
-  <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
-  <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
-  <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test3</span> <span class="o">=</span> <span class="n">Didatic_test</span><span class="p">(</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">the_function</span><span class="p">,</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="s1">&#39;forty&#39;</span><span class="p">),</span>
+    <span class="n">keyboard_inputs</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;two&#39;</span><span class="p">),</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="s1">&#39;Error demo&#39;</span><span class="p">,</span>
+    <span class="n">expected_output</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="n">expected_prints</span> <span class="o">=</span> <span class="s1">&#39;42</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">run_prints_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">run_output_test</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">test3</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -248,19 +258,10 @@ invalid literal for int() with base 10: ‘two’
 </div>
 </section>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
-<p><strong>Stable Release:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">didatictests</span></code><span class="raw-html-m2r"><br></span>
-<strong>Development Head:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/lmkawakami/didatictests.git</span></code></p>
-</section>
-<section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline"></a></h2>
-<p>For full package documentation please visit <a class="reference external" href="https://lmkawakami.github.io/didatictests">lmkawakami.github.io/didatictests</a>.</p>
-</section>
 <section id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline"></a></h2>
 <p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.
-<strong>MIT license</strong></p>
+<a class="reference external" href="LICENSE">**MIT license**</a></p>
 </section>
 </section>
 <section id="indices-and-tables">

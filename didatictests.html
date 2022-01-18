@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>didatictests package &mdash; didatictests 0.0.7 documentation</title>
+  <title>didatictests package &mdash; didatictests 0.0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> didatictests
           </a>
               <div class="version">
-                0.0.7
+                0.0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -119,7 +119,7 @@
 <span id="didatictests-didatictests-module"></span><h2>didatictests.didatictests module<a class="headerlink" href="#module-didatictests.didatictests" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">didatictests.didatictests.</span></span><span class="sig-name descname"><span class="pre">Didatic_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_prints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">didatictests.didatictests.</span></span><span class="sig-name descname"><span class="pre">Didatic_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_prints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to configure and run simple didatic tests</p>
 <p>Didatic_test(Callable=None, args={}, test_name=None, keyboard_inputs=(),         expected_output=None, expected_prints=””, verbose=None,             run_output_test=None, run_prints_test=None,
@@ -141,7 +141,7 @@
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.auto_redefine">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auto_redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.auto_redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.auto_redefine" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auto_redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.auto_redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.auto_redefine" title="Permalink to this definition"></a></dt>
 <dd><p>Run fn normally once and save all the inputs, then return a            redefined fn that reuses the same user inputs (simulated)
 The args and kwarks continue to work normally</p>
 <p>ex.: open_menu = auto_redefine(open_menu)</p>
@@ -149,7 +149,7 @@ The args and kwarks continue to work normally</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</p></li>
-<li><p><strong>input_verbose</strong> (<em>flag that controls if the inputs primpts will be printed</em>)</p></li>
+<li><p><strong>verbose</strong> (<em>flag that controls if the inputs primpts will be printed</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -167,25 +167,34 @@ The args and kwarks continue to work normally</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.input_interceptor">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_interceptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.input_interceptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.input_interceptor" title="Permalink to this definition"></a></dt>
-<dd><p>Intercept user inputs and copy them to a list for later use in test setup</p>
-<p>ex.: input_interceptor(open_menu, parse_args(1,2,3,x=0,y=2))</p>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.generate_test">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.generate_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.generate_test" title="Permalink to this definition"></a></dt>
+<dd><p>Run the function once using ther given ‘args’ and intercepts all            the inpus, prints and outpus
+Generate and return the string to create the test with the given configs.            and the intercepted infos.</p>
+<p>ex.: generate_test(fn, Didatic_test.parse_args(1,2,3), “Test-5”, True, True)</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fn</strong> (<em>The function that will be called with intercepted inputs</em>)</p></li>
-<li><p><strong>args</strong> (<em>{‘pos_inputs’:(1,2,3), ‘key_inputs’:{‘x’:0, ‘y’:2}}</em>)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>fn</strong> (<em>The function that will be tested</em>)</p>
+<p>args: dict in the format {“pos_inputs”: args, “key_inputs”: kwargs}
+test_name: test name to identify the results and hint the type of test
+verbose: controls if the fn’s internal inputs and prints will be printed
+run_output_test: controls if the output of the test run will be checked                 against the expected output value
+run_prints_test: controls if the prints of the test run will be checked                 against the expected prints
+generator_verbose: controls if the fn’s internal inputs and prints                 will be printed in the fist run (the interception run)</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>input_list</strong></p>
+<dd class="field-even"><p><strong>constructor_str</strong></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>a list of all user entries that were intercepted</p>
+<dd class="field-odd"><p>Return the string with the test constuctor containing                all the configurations and args predefined, and with the intecepted                    inputs, prints and outputs as the expected values</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.intercepted_fn">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intercepted_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interceptions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_identifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_identifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.intercepted_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.intercepted_fn" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.just_run">
@@ -207,28 +216,25 @@ The args and kwarks continue to work normally</p>
 <dd><p>Auxiliar function to pass fn’s args and kwargs like in a normal fn call
 Just passs the positional args first and then key arguments</p>
 <p>ex.: parse_args(1,2,3,x=15,y=[0,0,1],z=’aa’)</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><dl class="simple">
-<dt><strong>args</strong> (<em>The positional arguments of fn</em>)</dt><dd><ul>
+<li><p><strong>args</strong> (<em>The positional arguments of fn</em>)</p></li>
 <li><p><strong>kwargs</strong> (<em>The key arguments of fn</em>)</p></li>
 </ul>
 </dd>
-</dl>
-</li>
-</ul>
-<p>Returns</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>values</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict with 2 keys: ‘pos_inputs’ and ‘key_inputs’</p>
 </dd>
 </dl>
-<blockquote>
-<div><p>values: dict with 2 keys: ‘pos_inputs’ and ‘key_inputs’</p>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.redefine">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.redefine" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">redefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyboard_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.redefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.redefine" title="Permalink to this definition"></a></dt>
 <dd><p>Return a new function that will use the ‘keyboard_inputs’ tuple            as simulated inputs, but will work as fn otherwise</p>
 <p>ex.: call_menu = redefine(call_menu,(‘lorem ipsum’,’25’,’y’,’n’))</p>
 <dl class="field-list simple">
@@ -298,17 +304,29 @@ Just passs the positional args first and then key arguments</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.set_generator_defaults">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_generator_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_output_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_prints_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#Didatic_test.set_generator_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.Didatic_test.set_generator_defaults" title="Permalink to this definition"></a></dt>
+<dd><p>Set common default values fot the test generator to avoid unnecessary repetition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>Callable</em>) – The function that will be tested</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Controls if all the fn’s internal print()’s and                     input()’s prompts are printed when a test runs</p></li>
+<li><p><strong>run_output_test</strong> (<em>bool</em>) – Controls if the fn’s return value is tested</p></li>
+<li><p><strong>run_prints_test</strong> (<em>bool</em>) – Controls if the fn’s internal print()’s are tested</p></li>
+<li><p><strong>generator_verbose</strong> (<em>bool</em>) – Controls if all the fn’s internal print()’s and                    input()’s prompts are printed on the test                        generator run</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="didatictests.didatictests.Didatic_test.verbose">
 <span class="sig-name descname"><span class="pre">verbose</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#didatictests.didatictests.Didatic_test.verbose" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="didatictests.didatictests.tuplefy">
-<span class="sig-prename descclassname"><span class="pre">didatictests.didatictests.</span></span><span class="sig-name descname"><span class="pre">tuplefy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thing</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/didatictests/didatictests.html#tuplefy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#didatictests.didatictests.tuplefy" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 <section id="module-didatictests.example">
