@@ -2,10 +2,6 @@ import builtins
 import sys
 
 
-def tuplefy(thing):
-    return thing if type(thing) is tuple else (thing,)
-
-
 class Didatic_test:
     """
     A class to configure and run simple didatic tests
@@ -39,10 +35,6 @@ class Didatic_test:
     run_prints_test: bool
         Controls if the fn's internal print()'s are checked
     """
-
-    __print_fn_backup = builtins.print
-    __input_fn_backup = builtins.input
-    __intercepted_inputs_list = []
 
     # Função input que inputs copia pro 'inputs' tbm (não retorna pra print original)
     @staticmethod
@@ -124,24 +116,77 @@ class Didatic_test:
         return new_fn
 
     @staticmethod
-    def stringify_args(args):
+    def __stringify_args(args={}):
+        quotes = "'"
         pos_args = args.get("pos_inputs", ())
-        key_args = args.get("key_inputs", ())
+        key_args = args.get("key_inputs", {})
         pos_args_str = str(pos_args).replace("(", "").replace(")", "")
-        key_args_str = ", ".join([f"{key}={value}" for key, value in key_args.items()])
+        key_args_str = ", ".join(
+            [
+                f"{key}={quotes+value+quotes if type(value)==str else value}"
+                for key, value in key_args.items()
+            ]
+        )
         args_str = ", ".join([pos_args_str, key_args_str]).strip(", ")
         return f"({args_str})"
 
     @staticmethod
     def generate_test(
-        fn,
-        args,
-        test_name="Teste",
-        verbose=False,
-        run_output_test=True,
-        run_prints_test=False,
-        generator_verbose=False,
+        fn=None,
+        args={},
+        test_name="Test",
+        verbose=None,
+        run_output_test=None,
+        run_prints_test=None,
+        generator_verbose=None,
     ):
+        """
+        generate_test(fn, args, test_name="Test", verbose=False, \
+        run_output_test=True, run_prints_test=False, generator_verbose=False,)
+
+        Run the function once using ther given 'args' and intercepts all\
+            the inpus, prints and outpus
+        Generate and return the string to create the test with the given configs.\
+            and the intercepted infos.
+
+        ex.: generate_test(fn, Didatic_test.parse_args(1,2,3), "Test-5", True, True)
+
+        Parameters
+        ----------
+            fn: The function that will be tested
+
+
+            args: dict in the format {"pos_inputs": args, "key_inputs": kwargs}
+            test_name: test name to identify the results and hint the type of test
+            verbose: controls if the fn's internal inputs and prints will be printed
+            run_output_test: controls if the output of the test run will be checked \
+                against the expected output value
+            run_prints_test: controls if the prints of the test run will be checked \
+                against the expected prints
+            generator_verbose: controls if the fn's internal inputs and prints \
+                will be printed in the fist run (the interception run)
+
+        Returns
+        -------
+            constructor_str: Return the string with the test constuctor containing\
+                all the configurations and args predefined, and with the intecepted\
+                    inputs, prints and outputs as the expected values
+        """
+        if fn is None:
+            fn = Didatic_test.default_fn
+
+        if verbose is None:
+            verbose = Didatic_test.default_verbose or False
+
+        if run_output_test is None:
+            run_output_test = Didatic_test.default_run_output_test or True
+
+        if run_prints_test is None:
+            run_prints_test = Didatic_test.default_run_prints_test or False
+
+        if generator_verbose is None:
+            Didatic_test.default_generator_verbose = generator_verbose or False
+
         interceptions = {}
         intercepted_fn = Didatic_test.intercepted_fn(
             fn, interceptions, generator_verbose, "[I]: ", "[O]: "
@@ -149,16 +194,17 @@ class Didatic_test:
 
         pos_args = args.get("pos_inputs", ())
         key_args = args.get("key_inputs", {})
+
         output = intercepted_fn(*pos_args, **key_args)
 
         fn_name = fn.__name__
-        args_str = Didatic_test.stringify_args(args)
-        output_str = str(output)
+        args_str = Didatic_test.__stringify_args(args)
+        output_str = "'" + output + "'" if type(output) == str else str(output)
         prints_str = "".join(interceptions["prints"])
 
         constructor_str = f"Didatic_test({fn_name}, Didatic_test.parse_args\
-            {args_str}, '{test_name}', {interceptions['inputs']}, {output_str}, \
-                '{prints_str}', {verbose}, {run_output_test}, {run_prints_test})"
+{args_str}, '{test_name}', {interceptions['inputs']}, {output_str}, \
+'{prints_str}', {verbose}, {run_output_test}, {run_prints_test})"
 
         return constructor_str
 
@@ -278,6 +324,8 @@ class Didatic_test:
         for index, test in enumerate(tests):
             if test.test_name is None:
                 test.test_name = index
+            else:
+                test.test_name = f"{index} - {test.test_name}"
             result = test.run()
             correct_outputs_tests += result["output_is_correct"]
             correct_prints_tests += result["print_is_correct"]
@@ -332,6 +380,51 @@ class Didatic_test:
             Didatic_test.run_output_test = run_output_test
         if not (run_prints_test is None):
             Didatic_test.run_prints_test = run_prints_test
+
+    @staticmethod
+    def set_generator_defaults(
+        fn=None,
+        verbose=None,
+        run_output_test=None,
+        run_prints_test=None,
+        generator_verbose=None,
+    ):
+        """
+        set_generator_defaults(fn=None, verbose=None, run_output_test=None, \
+            run_prints_test=None, generator_verbose=None)
+
+        Set common default values fot the test generator to avoid unnecessary repetition
+
+        Parameters
+        ----------
+            fn: Callable
+                The function that will be tested
+            verbose: bool
+                Controls if all the fn's internal print()'s and \
+                    input()'s prompts are printed when a test runs
+            run_output_test: bool
+                Controls if the fn's return value is tested
+            run_prints_test: bool
+                Controls if the fn's internal print()'s are tested
+            generator_verbose: bool
+                Controls if all the fn's internal print()'s and\
+                    input()'s prompts are printed on the test\
+                        generator run
+        """
+        if not (fn is None):
+            Didatic_test.default_fn = fn
+
+        if not (verbose is None):
+            Didatic_test.default_verbose = verbose
+
+        if not (run_output_test is None):
+            Didatic_test.default_run_output_test = run_output_test
+
+        if not (run_prints_test is None):
+            Didatic_test.default_run_prints_test = run_prints_test
+
+        if not (generator_verbose is None):
+            Didatic_test.default_generator_verbose = generator_verbose
 
     def run(self):
         """
@@ -457,47 +550,6 @@ class Didatic_test:
             run_prints_test: {self.run_prints_test}/n\
             interceptions: {str(self.interceptions)}"
 
-    def __testing_input(self, prompt):
-
-        test_input = str(self.keyboard_inputs_list.pop(0))
-        if self.verbose:
-            self.__verbose_buffer += "[I]: " + prompt + " " + test_input + "\n"
-        return test_input
-
-    def __redefine_input_fn(self, test_mode):
-        if test_mode:
-            self.__input_fn_backup = builtins.input
-            builtins.input = self.__testing_input
-        else:
-            builtins.input = self.__input_fn_backup
-
-    def __testing_print(self, *objects, sep=" ", end="\n", file=None, flush=None):
-        prompt = sep.join(list([str(object) for object in objects])) + end
-        if self.verbose:
-            self.__verbose_buffer += "[P]: " + prompt
-        # Filtrar linhas que começam com '[DBG]'
-        # para usálas como debug sem comprometer os testes de comparação de print
-        if prompt[0:5] != "[DBG]":
-            self.__prints_buffer += prompt
-
-    def __redefine_print_fn(self, test_mode):
-        if test_mode:
-            self.__print_fn_backup = builtins.print
-            builtins.print = self.__testing_print
-        else:
-            builtins.print = self.__print_fn_backup
-
-    def __toggle_test_mode(self, test_mode):
-        self.__redefine_input_fn(test_mode)
-        self.__redefine_print_fn(test_mode)
-
-    def __flush_buffers(self):
-        self.__prints_buffer = ""
-        self.__verbose_buffer = ""
-
-    def __print_buffer(self):
-        print(self.__verbose_buffer)
-
     def __print_exception(self):
         print("🚨⚠️🚨⚠️🚨 Error! 💀💀💀")
         print(type(self.test_exception))
@@ -538,7 +590,7 @@ class Didatic_test:
             keyboard_inputs_line = f"\n   ➖ Keyboard inputs:    {self.keyboard_inputs}"
             output_line = (
                 f"\n   {outputs_check} Function outputs:   \
-                    {self.interceptions['output']}"
+{self.interceptions['output']}"
                 if self.run_output_test
                 else ""
             )

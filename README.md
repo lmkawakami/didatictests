@@ -12,10 +12,20 @@
 
 -   Build simple tests to validate functions prints and outputs with configurable args, kwargs and simulated user inputs
 
+## Installation
+
+**Stable Release:** `pip install didatictests`<br>
+**Development Head:** `pip install git+https://github.com/lmkawakami/didatictests.git`
+
+## Documentation
+
+[Notebook showcase em português](notebooks/exemplos.ipynb)
+
+For full package documentation please visit [lmkawakami.github.io/didatictests](https://lmkawakami.github.io/didatictests).
 ## Quick Start
 
 ```python
-from didatictests import Didatic_test as Dt
+from didatictests import Didatic_test
 ```
 
 Demo function: `the_function(arg)`:
@@ -27,10 +37,10 @@ Demo function: `the_function(arg)`:
 
 ```python
 def the_function(arg):
-  inp = input("One number, please: ")
-  total = arg + int(inp)
-  print(total)
-  return total
+    inp = input("One number, please: ")
+    total = arg + int(inp)
+    print(total)
+    return total
 ```
 
 Create and run some tests:
@@ -39,16 +49,16 @@ Create and run some tests:
 ### Test-1
 
 ```python
-test1 = Dt(
-  fn = the_function,
-  args = Dt.parse_args(40),
-  keyboard_inputs = ('2'),
-  test_name = 'This one shall pass!',
-  expected_output = 42,
-  expected_prints = '42\n',
-  run_prints_test = True,
-  run_output_test = True,
-  verbose=True
+test1 = Didatic_test(
+    fn = the_function,
+    args = Dt.parse_args(40),
+    keyboard_inputs = ('2'),
+    test_name = 'This one shall pass!',
+    expected_output = 42,
+    expected_prints = '42\n',
+    run_prints_test = True,
+    run_output_test = True,
+    verbose=True
 )
 
 test1.run()
@@ -59,7 +69,7 @@ Case: This one shall pass!
 [I]: One number, please:  2
 [P]: 42
 
-outputs: ✔️  prints: ✔️                
+outputs: ✔️  prints: ✔️
 ---------------------------------------------------
 ```
 - return:
@@ -71,16 +81,16 @@ outputs: ✔️  prints: ✔️
 ### Test-2
 
 ```python
-test2 = Dt(
-  fn = the_function,
-  args = Dt.parse_args(40),
-  keyboard_inputs = ('2'),
-  test_name = 'You Shall Not Pass!!!',
-  expected_output = 42,
-  expected_prints = '13\n',
-  run_prints_test = True,
-  run_output_test = True,
-  verbose=True
+test2 = Didatic_test(
+    fn = the_function,
+    args = Dt.parse_args(40),
+    keyboard_inputs = ('2'),
+    test_name = 'You Shall Not Pass!!!',
+    expected_output = 42,
+    expected_prints = '13\n',
+    run_prints_test = True,
+    run_output_test = True,
+    verbose=True
 )
 
 test2.run()
@@ -91,10 +101,10 @@ Case: You Shall Not Pass!!!
 [I]: One number, please:  2
 [P]: 42
 
-outputs: ✔️  prints: ❌                
+outputs: ✔️  prints: ❌
    ➖ Function args:      (40,) {}
    ➖ Keyboard inputs:    ('2',)
-   ✔️ Function outputs:   42                  
+   ✔️ Function outputs:   42
    ➖ Expected output:    42
    ❌ fn internal prints: 42
    ➖ Expected prints:    13
@@ -109,16 +119,16 @@ outputs: ✔️  prints: ❌
 ### Test-3
 
 ```python
-test3 = Dt(
-  fn = the_function,
-  args = Dt.parse_args('forty'),
-  keyboard_inputs = ('two'),
-  test_name = 'Error demo',
-  expected_output = 42,
-  expected_prints = '42\n',
-  run_prints_test = True,
-  run_output_test = True,
-  verbose=True
+test3 = Didatic_test(
+    fn = the_function,
+    args = Dt.parse_args('forty'),
+    keyboard_inputs = ('two'),
+    test_name = 'Error demo',
+    expected_output = 42,
+    expected_prints = '42\n',
+    run_prints_test = True,
+    run_output_test = True,
+    verbose=True
 )
 
 test3.run()
@@ -139,17 +149,8 @@ invalid literal for int() with base 10: 'two'
 {'output_is_correct': False, 'print_is_correct': False, 'test_failed': True, 'test_done': False}
 ```
 
-## Installation
-
-**Stable Release:** `pip install didatictests`<br>
-**Development Head:** `pip install git+https://github.com/lmkawakami/didatictests.git`
-
-## Documentation
-
-For full package documentation please visit [lmkawakami.github.io/didatictests](https://lmkawakami.github.io/didatictests).
-
 ## Development
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
-**MIT license**
+[**MIT license**](LICENSE)
 
