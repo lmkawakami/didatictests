@@ -28,6 +28,8 @@
 
 [Notebook showcase em português](notebooks/exemplos.ipynb)
 
+[Notebook de funcionalidades extras em português](notebooks/brindes.ipynb)
+
 For full package documentation please visit [lmkawakami.github.io/didatictests](https://lmkawakami.github.io/didatictests).
 ## Quick Start
 
