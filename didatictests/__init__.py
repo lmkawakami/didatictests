@@ -16,3 +16,10 @@ def get_module_version():
 from .example import Example  # noqa: F401
 
 from .didatictests import Didatic_test  # noqa: F401
+
+from .statistics import (  # noqa: F401
+    pop_mean_test,  # noqa: F401
+    pop_mean_interval,  # noqa: F401
+    resumo_metodos_distribuicoes,  # noqa: F401
+    resumo_teste_hipoteses,  # noqa: F401
+)

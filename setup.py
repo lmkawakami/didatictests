@@ -10,6 +10,7 @@ with open("README.md") as readme_file:
 
 setup_requirements = [
     "pytest-runner>=5.2",
+    "matplotlib>=3.0.0",
 ]
 
 test_requirements = [
@@ -20,6 +21,7 @@ test_requirements = [
     "pytest>=5.4.3",
     "pytest-cov>=2.9.0",
     "pytest-raises>=0.11",
+    "matplotlib>=3.0.0",
 ]
 
 dev_requirements = [
@@ -35,9 +37,10 @@ dev_requirements = [
     "tox>=3.15.2",
     "twine>=3.1.1",
     "wheel>=0.34.2",
+    "matplotlib>=3.0.0",
 ]
 
-requirements = []
+requirements = ["matplotlib", "numpy"]
 
 extra_requirements = {
     "setup": setup_requirements,
@@ -46,7 +49,7 @@ extra_requirements = {
     "all": [
         *requirements,
         *dev_requirements,
-    ]
+    ],
 }
 
 setup(
@@ -63,9 +66,7 @@ setup(
     ],
     description="Build simple tests to validate functions prints and outputs with configurable args, kwargs and simulated user inputs",
     entry_points={
-        "console_scripts": [
-            "my_example=didatictests.bin.my_example:main"
-        ],
+        "console_scripts": ["my_example=didatictests.bin.my_example:main"],
     },
     install_requires=requirements,
     license="MIT license",
